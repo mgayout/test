@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/09 16:57:10 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:14:00 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,28 @@ typedef struct s_exec
 	int				pipefd[2];
 	int				*pid;
 	int				heredoc;
-	int				status;
 	int				nb_cmd;
+	int				nb_arg;
 	int				infile;
 	int				outfile;
-	char			*path;
-	char			**path_cmd;
-	char			**cmd;
-	char			*cmd_path;
-	struct s_mini	lst;
+	char			**arg2;
+	char			*arg1;
+	int				status;
+	struct s_mini	*lst;
 }					t_exec;
 
 //MAIN
 
-
+int		token_lst(char *str);
+char	*status_lst(t_mini *lst);
+int		is_a_cmd(char *str);
 
 //LST_ARG
 
+void	create_lst(t_mini **lst, char **arg);
 void	fill_list(t_mini **lst, char *str);
 void	print_lst(t_mini *lst);
 void	free_lst(t_mini **s);
-int		token_lst(char *str);
 
 //LST_FUNCTION
 
@@ -80,7 +81,11 @@ int		lstsize(t_mini *lst);
 //EXEC
 
 void	exec_arg(t_mini *lst, char **envp);
-
-//INIT_EXEC
+void	open_pipe(t_exec *exec, char **envp);
+void	children(t_exec *exec, char **envp);
+char	*ft_arg1(char *str);
+char	**ft_arg2(t_mini *lst);
+t_mini	*good_cmd(t_exec *exec);
+void	init_exec(t_exec *exec);
 
 #endif

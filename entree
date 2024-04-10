@@ -1,0 +1,1 @@
+< entree cat | wc -l > sortie
