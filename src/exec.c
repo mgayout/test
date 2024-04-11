@@ -6,62 +6,70 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:29:25 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/10 17:51:14 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/11 18:40:34 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	exec_arg(t_mini *lst, char **envp)
+void	exec_arg(t_data *data)
 {
-	t_exec	exec;
-
-	exec.lst = malloc(sizeof(t_mini));
-	exec.lst = lst;
-	init_exec(&exec);
-	dup2(exec.infile, STDIN_FILENO);
-	while(exec.status < exec.nb_cmd)
+	data->exec = malloc(sizeof(t_exec));
+	init_exec(data);
+	while(data->exec->status < data->exec->nb_cmd)
 	{
-		pipe(exec.pipefd);
-		exec.pid[exec.status] = fork();
-		open_pipe(&exec, envp);
-		exec.status += 1;
+		if (data->exec->nb_cmd > 1)
+			pipe(data->exec->pipefd);
+		data->exec->pid[data->exec->status] = fork();
+		//init_child(data);
+		//children(data);
+		open_pipe(data);
+		data->exec->status += 1;
 	}
+	free(data->exec->pid);
+	free(data->exec->child);
 }
 
-void	open_pipe(t_exec *exec, char **envp)
+void	open_pipe(t_data *data)
 {
-	if (!exec->pid[exec->status])
+	int	i;
+
+	i = data->exec->status;
+	if (!data->exec->pid[data->exec->status])
 	{
-		if (exec->status < exec->nb_cmd - 1)
-		{
-			close(exec->pipefd[0]);
-			dup2(exec->pipefd[1], STDOUT_FILENO);
-			children(exec, envp);
-		}
-		else
-		{
-			dup2(exec->outfile, STDOUT_FILENO);
-			children(exec, envp);
-		}
+		init_child(data);
+		if (data->exec->child[i].pipein)
+			dup2(data->exec->pipefd[0], STDIN_FILENO);
+		if (data->exec->child[i].pipeout)
+			dup2(data->exec->pipefd[1], STDOUT_FILENO);
+		children(data);
 	}
 	else
 	{
-		dup2(exec->pipefd[0], STDIN_FILENO);
-		close(exec->pipefd[1]);
-		waitpid(exec->pid[exec->status], NULL, 0);
+		dup2(data->exec->pipefd[0], STDIN_FILENO);
+		close(data->exec->pipefd[1]);
+		waitpid(data->exec->pid[data->exec->status], NULL, 0);
 	}
 }
 
-void	children(t_exec *exec, char **envp)
+void	children(t_data *data)
 {
-	t_mini	*lst;
-
-	lst = good_cmd(exec);
-	exec->arg1 = ft_arg1(lst->data);
-	exec->arg2 = ft_arg2(lst);
-	printf("%s\n", exec->arg1);
-	execve(exec->arg1, exec->arg2, envp);
+	t_exec	*exec;
+	int		i;
+	int		j;
+	
+	j = 0;
+	i = data->exec->status;
+	exec = data->exec;
+	exec->child[i].arg1 = ft_arg1(exec->child[i].cmd);
+	//printf("arg1 = %s\n", exec->child[i].arg1);
+	exec->child[i].arg2 = ft_arg2(data);
+	while (exec->child[i].arg2[j])
+	{
+		//printf("arg2 = %s\n", exec->child[i].arg2[j]);
+		j++;
+	}
+	execve(exec->child[i].arg1, exec->child[i].arg2, data->envp);
 }
 
 char	*ft_arg1(char *str)
@@ -71,7 +79,7 @@ char	*ft_arg1(char *str)
 	char	*path_cmd;
 	int		i;
 
-	path = ft_split(getenv("PATH"), ':');	
+	path = ft_split(getenv("PATH"), ':');
 	i = 0;
 	while (path[i] != NULL)
 	{
@@ -85,77 +93,63 @@ char	*ft_arg1(char *str)
 	}
 	if (access(str, 0) == 0)
 		return (str);
-	printf("ok\n");
 	return (NULL);
 }
 
-char	**ft_arg2(t_mini *lst)
+char	**ft_arg2(t_data *data)
 {
 	char	**arg2;
 	char	*tmp;
+	int		i;
 
-	tmp = ft_strjoin(lst->data, " ");
-	if (!ft_strncmp(lst->next->status, "flag", 5))
+	i = data->exec->status;
+	if (data->exec->child[i].arg)
 	{
+		tmp = ft_strjoin(data->exec->child[i].cmd, " ");
+		tmp = ft_strjoin(tmp, data->exec->child[i].arg);
+		arg2 = ft_split(tmp, ' ');
+	}
+	else if (data->exec->child[i].flag)
+	{
+		tmp = ft_strjoin(data->exec->child[i].cmd, " ");
+		tmp = ft_strjoin(tmp, data->exec->child[i].flag);
+		arg2 = ft_split(tmp, ' ');
+	}
+	else
+		arg2 = ft_split(data->exec->child[i].cmd, ' ');
+	return (arg2);
+	/*if (lst->next != NULL && !ft_strncmp(lst->next->status, "flag", 5))
+	{
+		tmp = ft_strdup(lst->data);
 		lst = lst->next;
+		tmp = ft_strjoin(tmp, " ");
 		tmp = ft_strjoin(tmp, lst->data);
 		tmp = ft_strjoin(tmp, " ");
+		arg2 = ft_split(tmp, ' ');
 	}
-	tmp = ft_strjoin(tmp, "NULL");
-	arg2 = ft_split(tmp, ' ');
-	return (arg2);
+	else
+	{
+		arg2 = malloc(sizeof(char *) * 2);
+		arg2[0] = ft_strdup(lst->data);;
+		arg2[1] = NULL;
+	}
+	return (arg2);*/
 }
 
-t_mini	*good_cmd(t_exec *exec)
+t_arg	*good_cmd(t_data *data)
 {
-	t_mini	*tmp;
+	t_arg	*tmp;
 	int		nb;
 
-	tmp = exec->lst;
-	nb = -1;
-	while (nb != exec->status)
+	tmp = data->lst;
+	nb = 0;
+	while (tmp != NULL)
 	{
-		if (!ft_strncmp(tmp->status, "cmd", 4))
+		if (!ft_strncmp(tmp->status, "cmd", 4) && nb == data->exec->status)
+			return (tmp);
+		else if (!ft_strncmp(tmp->status, "cmd", 4) && nb != data->exec->status)
 			nb++;
 		tmp = tmp->next;
 	}
 	return (tmp->prev);
-}
-
-void	init_exec(t_exec *exec)
-{
-	t_mini	*tmp;
-	int		first_file;
-
-	first_file = 0;
-	tmp = exec->lst;
-	exec->status = 0;
-	exec->nb_arg = lstsize(tmp);
-	exec->nb_cmd = 0;
-	while (tmp != NULL)
-	{
-		if (!ft_strncmp(tmp->status, "file", 5))
-		{
-			if (first_file == 0)
-			{
-				printf("infile\n");
-				exec->infile = open(tmp->data, O_RDONLY);
-			}
-			else
-			{
-				printf("outfile\n");
-				exec->outfile = open(tmp->data, O_CREAT
-				| O_RDWR | O_TRUNC, 0777);
-			}
-			first_file++;
-		}
-		else if (!ft_strncmp(tmp->status, "cmd", 4))
-			exec->nb_cmd += 1;
-		tmp = tmp->next;
-	}
-	if (exec->infile == -1)
-		printf("error\n");
-	if (exec->outfile == -1)
-		printf("error\n");
-	exec->pid = malloc(sizeof(int) * exec->nb_cmd);
 }

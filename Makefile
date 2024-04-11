@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/09 16:30:01 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/11 14:49:34 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ LIBFT = libft-/libft.a
 SRC =	main \
 		lst_arg \
 		exec \
+		exec_init \
 		lst_function \
 		
 

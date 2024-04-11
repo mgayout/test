@@ -1,1 +1,2 @@
-/usr/bin/cat
+< filein cat -e | ls -l | wc -l | echo "Hello!" | sleep 5 > fileout
+< filein ls -l | wc -l > fileout

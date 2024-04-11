@@ -6,22 +6,79 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/10 16:37:18 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/11 17:44:45 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*status_lst(t_mini *lst)
+void	start_cmd(t_arg *lst)
 {
+	t_arg	*tmp;
+	
+	tmp = lst;
+	while (tmp != NULL)
+	{
+		if (tmp->token > 0)
+		{
+			if (!ft_strncmp(tmp->data, "<", 2))
+				lst->infile = ft_strdup(tmp->next->data);
+			else if (!ft_strncmp(tmp->data, ">", 2))
+				lst->outfile = ft_strdup(tmp->next->data);
+			else if (!ft_strncmp(tmp->data, "|", 2))
+				lst->pipein = true;
+			/*printf("BACK\ninfile = %s && outfile = %s\n", lst->infile, lst->outfile);
+			if (lst->pipein == true)
+				printf("true\n");
+			else
+				printf("false\n");*/
+			return ;
+		}
+		tmp = tmp->prev;
+	}
+}
+
+void	end_cmd(t_arg *lst)
+{
+	t_arg	*tmp;
+
+	tmp = lst;
+	while (tmp != NULL)
+	{
+		if (tmp->token > 0)
+		{
+			if (!ft_strncmp(tmp->data, "<", 2))
+				lst->infile = ft_strdup(tmp->next->data);
+			else if (!ft_strncmp(tmp->data, ">", 2))
+				lst->outfile = ft_strdup(tmp->next->data);
+			else if (!ft_strncmp(tmp->data, "|", 2))
+				lst->pipeout = true;
+			/*printf("FRONT\ninfile = %s && outfile = %s\n", lst->infile, lst->outfile);
+			if (lst->pipein == true)
+				printf("true\n");
+			else
+				printf("false\n");*/
+			return ;
+		}
+		tmp = tmp->next;
+	}
+}
+
+char	*status_lst(t_arg *lst)
+{
+	//printf("data prev = %s && new = %s\n", lst->prev->data, lst->data);
 	if (lst->token > 0)
 		return (ft_strdup("token"));
 	if (is_a_cmd(lst->data))
 		return (ft_strdup("cmd"));
 	else if (!ft_strncmp(lst->data, "-", 1))
 		return (ft_strdup("flag"));
+	else if (is_an_arg(&lst))
+		return (ft_strdup("arg"));
+	else if (is_a_file(&lst))
+		return (ft_strdup("file"));
 	else
-		return (ft_strdup("file")); //arg
+		return (ft_strdup("IDK"));
 }
 
 int	is_a_cmd(char *str)
@@ -39,10 +96,7 @@ int	is_a_cmd(char *str)
 		path_cmd = ft_strjoin(tmp, str);
 		free(tmp);
 		if (access(path_cmd, 0) == 0)
-		{
-			printf("%s\n", path_cmd);
 			return (1);
-		}
 		free(path_cmd);
 		i++;
 	}
@@ -52,6 +106,31 @@ int	is_a_cmd(char *str)
 		return (1);
 	}*/
 	return (0);
+}
+
+int	is_an_arg(t_arg **lst)
+{
+	t_arg	*tmp;
+
+	tmp = *lst;
+	if (tmp->prev == NULL)
+		return (0);
+	else if (!ft_strncmp(tmp->prev->status, "cmd", 3))
+		return (1);
+	return (0);
+}
+
+int	is_a_file(t_arg **lst)
+{
+	t_arg	*tmp;
+	
+	tmp = *lst;
+	if (tmp->prev == NULL)
+		return (0);
+	else if (tmp->prev->token > 0 && tmp->prev->token < 5)
+		return (1);
+	else
+		return (0);
 }
 
 int	token_lst(char *str)
@@ -70,23 +149,32 @@ int	token_lst(char *str)
 		return (0);
 }
 
-int	main(int argc, char **argv, char *envp[])
+void	minishell_loop(t_data *data)
 {
-	t_mini	*lst;
+	t_arg	*lst;
 	char	**arg;
 	char	*prompt;
 
+	lst = NULL;
+	data->lst = lst;
+	prompt = readline("minishell :");
+	add_history(prompt);
+	arg = ft_split(prompt, ' ');
+	create_lst(&data->lst, arg);
+	//print_lst(data->lst);
+	exec_arg(data);
+	free_lst(&data->lst);
+	minishell_loop(data);
+}
+
+int	main(int argc, char **argv, char *envp[])
+{
+	t_data data;
+
 	if (argc != 1 || argv[1])
 		return (0);
-	lst = NULL;
-	while (1)
-	{
-		prompt = readline("minishell :");
-		add_history(prompt);
-		arg = ft_split(prompt, ' ');
-		create_lst(&lst, arg);
-		print_lst(lst);
-		exec_arg(lst, envp);
-		free_lst(&lst);
-	}
+	data.envp = envp;
+	if (!data.envp[0])
+		return(0);
+	minishell_loop(&data);
 }

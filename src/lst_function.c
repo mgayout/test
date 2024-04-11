@@ -6,15 +6,15 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 14:51:51 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/09 15:21:42 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/11 11:04:28 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	lstadd_back(t_mini **lst, t_mini *new)
+void	lstadd_back(t_arg **lst, t_arg *new)
 {
-	t_mini	*back;
+	t_arg	*back;
 
 	if (!*lst)
 		*lst = new;
@@ -25,9 +25,9 @@ void	lstadd_back(t_mini **lst, t_mini *new)
 	}
 }
 
-t_mini	*lstlast(t_mini *lst)
+t_arg	*lstlast(t_arg *lst)
 {
-	t_mini	*last;
+	t_arg	*last;
 	int		i;
 	int		j;
 
@@ -44,7 +44,7 @@ t_mini	*lstlast(t_mini *lst)
 	return (last);
 }
 
-int	lstsize(t_mini *lst)
+int	lstsize(t_arg *lst)
 {
 	int	size;
 

@@ -6,13 +6,13 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:27:23 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/10 16:57:18 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/11 17:13:56 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	create_lst(t_mini **lst, char **arg)
+void	create_lst(t_arg **lst, char **arg)
 {
 	int		i;
 
@@ -22,23 +22,45 @@ void	create_lst(t_mini **lst, char **arg)
 		fill_list(lst, arg[i]);
 		i++;
 	}
+	init_status(*lst);
+	init_files(*lst);
 }
 
-void	fill_list(t_mini **lst, char *str)
+void	init_status(t_arg *lst)
 {
-	t_mini	*new;
-	t_mini	*tmp;
+	while (lst != NULL)
+	{
+		lst->status = status_lst(lst);
+		lst = lst->next;
+	}
+}
+
+void	init_files(t_arg *lst)
+{
+	while (lst != NULL)
+	{
+		if (!ft_strncmp(lst->status, "cmd", 4))
+		{
+			start_cmd(lst);
+			end_cmd(lst);
+		}
+		lst = lst->next;
+	}
+}
+
+void	fill_list(t_arg **lst, char *str)
+{
+	t_arg	*new;
+	t_arg	*tmp;
 
 	if (!lst)
 		return ;
-	new = malloc(sizeof(t_mini));
+	new = malloc(sizeof(t_arg));
 	if (!new)
 		return ;
 	new->data = str;
-	new->builtins = 0;
 	new->token = token_lst(new->data);
 	new->id = lstsize(*lst) + 1;
-	new->status = status_lst(new);
 	new->next = NULL;
 	new->prev = NULL;
 	if (!(*lst))
@@ -51,20 +73,35 @@ void	fill_list(t_mini **lst, char *str)
 	}
 }
 
-void	print_lst(t_mini *lst)
+void	print_lst(t_arg *lst)
 {
 	if (lst == NULL)
 		ft_printf("lst is NULL\n");
 	while (lst != NULL)
 	{
-		ft_printf("id = %d\nstatus = %s\ndata = %s\nbuiltins = %d\ntoken = %d\n\n", lst->id, lst->status, lst->data, lst->builtins, lst->token);
+		printf("id = %d\nstatus = %s\ndata = %s\n", lst->id, lst->status, lst->data);
+		if (!ft_strncmp(lst->status, "cmd", 4))
+		{
+			printf("infile = %s\noutfile = %s\n", lst->infile, lst->outfile);
+			if (lst->pipein == true)
+				printf("pipein = true\n");
+			else
+				printf("pipein = false\n");
+			if (lst->pipeout == true)
+				printf("pipeout = true\n");
+			else
+				printf("pipeout = false\n");
+		}
+		if (!ft_strncmp(lst->status, "token", 6))
+			printf("token = %d\n", lst->token);
+		printf("\n");
 		lst = lst->next;
 	}
 }
 
-void	free_lst(t_mini **s)
+void	free_lst(t_arg **s)
 {
-	t_mini	*clean;
+	t_arg	*clean;
 
 	while (*s != NULL)
 	{
