@@ -1,0 +1,62 @@
+minishell_loop :
+
+Boucle infini qui affiche le prompt, separe les args, les envoies a l'execution et free.
+
+Pour afficher le prompt = readline(minishell);
+Pour afficher l'historique = add_history();
+
+create_lst :
+
+Recupere mes arguments et cree une liste doublement chainee avec chaque args.
+Pour chaque arg j'assigne :
+
+- (int) un ID = numero de l'element.
+
+- (char *) un status = ex : cmd, file, arg, flag ou token.
+
+- (char *) une data = l'argument.
+
+Si l'argument est une commande :
+
+- (int) un infile = fichier d'entree.
+
+- (int) un outfile = fichier de sortie.
+
+- (bool) un pipein (true) = doit lire dans un pipe.
+
+- (bool) un pipeout (true) = doit ecrire dans un pipe.
+
+Si infile est NULL et que pipein est false = la commande doit lire dans l'entree std.
+Si outfile est NULL et que pipeout est false = la commande doit ecrire dans la sortie std.
+
+Si l'argument est un token :
+
+- (int) token = '<<' = 1 && '<' = 2 && '>' = 3 && '>>' = 4 && '|' = 5.
+
+Partie EXEC :
+
+Je cree une structure pour chaque cmd.
+Et la structure me permet d'aller directement chercher les elements necessaire, c'est a dire :
+
+- la cmd.
+
+- le flag (ex : -l), l'argument (ex : echo "Bonjour!").
+
+- et les redirections (fichiers d'entree, de sortie, pipe d'entree, de sortie, entree std, sortie std).
+
+Note :
+
+Pour le moment on peut lancer des commandes "basique".
+C'est a dire juste une commande seule ou suivi d'un arg ou d'un argument.
+
+Exemples :
+
+- cat
+- cat -e
+- echo "Hello!"
+- sleep 5
+- clear
+- ls
+- ls -l
+- wc
+- wc -l

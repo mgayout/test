@@ -6,11 +6,11 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:29:25 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/11 18:40:34 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:16:09 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	exec_arg(t_data *data)
 {
@@ -18,39 +18,51 @@ void	exec_arg(t_data *data)
 	init_exec(data);
 	while(data->exec->status < data->exec->nb_cmd)
 	{
-		if (data->exec->nb_cmd > 1)
-			pipe(data->exec->pipefd);
+		//if (data->exec->nb_cmd > 1)
+			//pipe(data->exec->pipefd);
 		data->exec->pid[data->exec->status] = fork();
-		//init_child(data);
-		//children(data);
-		open_pipe(data);
+		if (!data->exec->pid[data->exec->status])
+		{
+			init_child(data);
+			children(data);
+		}
+		//open_pipe(data);
+		waitpid(data->exec->pid[data->exec->status], NULL, 0);
 		data->exec->status += 1;
 	}
 	free(data->exec->pid);
 	free(data->exec->child);
 }
 
-void	open_pipe(t_data *data)
+/*void	open_pipe(t_data *data)
 {
 	int	i;
 
 	i = data->exec->status;
-	if (!data->exec->pid[data->exec->status])
+	if (!data->exec->pid[i])
 	{
-		init_child(data);
-		if (data->exec->child[i].pipein)
-			dup2(data->exec->pipefd[0], STDIN_FILENO);
-		if (data->exec->child[i].pipeout)
-			dup2(data->exec->pipefd[1], STDOUT_FILENO);
-		children(data);
+		if (data->exec->nb_cmd > 1)
+		{
+			init_child(data);
+			children(data);
+		}
+		else
+		{
+			init_child(data);
+			if (data->exec->child[i].pipein)
+				//dup2(data->exec->pipefd[0], STDIN_FILENO);
+			if (data->exec->child[i].pipeout)
+				//dup2(data->exec->pipefd[1], STDOUT_FILENO);
+			children(data);
+		}
 	}
 	else
 	{
-		dup2(data->exec->pipefd[0], STDIN_FILENO);
-		close(data->exec->pipefd[1]);
-		waitpid(data->exec->pid[data->exec->status], NULL, 0);
+		//dup2(data->exec->pipefd[0], STDIN_FILENO);
+		//close(data->exec->pipefd[1]);
+		waitpid(data->exec->pid[i], NULL, 0);
 	}
-}
+}*/
 
 void	children(t_data *data)
 {

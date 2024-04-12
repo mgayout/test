@@ -6,11 +6,11 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/11 18:35:37 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:16:05 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	init_exec(t_data *data)
 {
@@ -51,10 +51,13 @@ void	init_child(t_data *data)
 		{
 			//printf("if : data = %s\n", tmp->data);
 			data->exec->child[i].cmd = ft_strdup(tmp->data);
-			if (!ft_strncmp(tmp->next->status, "arg", 4))
-				data->exec->child[i].arg = ft_strdup(tmp->next->data);
-			else if (!ft_strncmp(tmp->next->status, "flag", 5))
-				data->exec->child[i].flag = ft_strdup(tmp->next->data);
+			if (tmp->next != NULL)
+			{
+				if (!ft_strncmp(tmp->next->status, "arg", 4))
+					data->exec->child[i].arg = ft_strdup(tmp->next->data);
+				else if (!ft_strncmp(tmp->next->status, "flag", 5))
+					data->exec->child[i].flag = ft_strdup(tmp->next->data);
+			}
 			if (tmp->infile)
 				data->exec->child[i].infile = open(tmp->infile, O_RDONLY);
 			if (tmp->outfile)

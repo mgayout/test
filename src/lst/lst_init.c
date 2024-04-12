@@ -1,58 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_function.c                                     :+:      :+:    :+:   */
+/*   lst_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 14:51:51 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/11 11:04:28 by mgayout          ###   ########.fr       */
+/*   Created: 2024/04/09 16:27:23 by mgayout           #+#    #+#             */
+/*   Updated: 2024/04/12 11:26:35 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-void	lstadd_back(t_arg **lst, t_arg *new)
+void	create_lst(t_arg **lst, char **arg)
 {
-	t_arg	*back;
-
-	if (!*lst)
-		*lst = new;
-	else
-	{
-		back = lstlast(*lst);
-		back->next = new;
-	}
-}
-
-t_arg	*lstlast(t_arg *lst)
-{
-	t_arg	*last;
 	int		i;
-	int		j;
 
-	last = lst;
-	if (!last)
-		return (NULL);
-	i = 1;
-	j = lstsize(last);
-	while (i != j)
+	i = 0;
+	while (arg[i])
 	{
-		last = last->next;
+		fill_list(lst, arg[i]);
 		i++;
 	}
-	return (last);
+	fill_status(*lst);
+	fill_in_out(*lst);
 }
 
-int	lstsize(t_arg *lst)
+void	fill_status(t_arg *lst)
 {
-	int	size;
-
-	size = 0;
 	while (lst != NULL)
 	{
-		++size;
+		lst->status = status_lst(lst);
 		lst = lst->next;
 	}
-	return (size);
+}
+
+void	fill_in_out(t_arg *lst)
+{
+	while (lst != NULL)
+	{
+		if (!ft_strncmp(lst->status, "cmd", 4))
+		{
+			before_cmd(lst);
+			after_cmd(lst);
+		}
+		lst = lst->next;
+	}
 }

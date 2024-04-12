@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/11 18:41:17 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/12 12:29:04 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,27 @@ typedef struct s_data
 
 //MAIN
 
-void	start_cmd(t_arg *lst);
-void	end_cmd(t_arg *lst);
-int		token_lst(char *str);
+void	minishell_loop(t_data *data);
+
+//LST_INIT
+
+void	create_lst(t_arg **lst, char **arg);
+void	fill_status(t_arg *lst);
+void	fill_in_out(t_arg *lst);
+
+//LST_FILL
+
+void	fill_list(t_arg **lst, char *str);
 char	*status_lst(t_arg *lst);
+int		token_lst(char *str);
+void	before_cmd(t_arg *lst);
+void	after_cmd(t_arg *lst);
+
+//LST_UTILS
+
 int		is_a_cmd(char *str);
 int		is_an_arg(t_arg **lst);
 int		is_a_file(t_arg **lst);
-
-//LST_ARG
-
-void	create_lst(t_arg **lst, char **arg);
-void	init_status(t_arg *lst);
-void	init_files(t_arg *lst);
-void	fill_list(t_arg **lst, char *str);
 void	print_lst(t_arg *lst);
 void	free_lst(t_arg **s);
 
