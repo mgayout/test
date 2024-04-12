@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:29:25 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/12 11:16:09 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/12 18:20:24 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,45 +16,78 @@ void	exec_arg(t_data *data)
 {
 	data->exec = malloc(sizeof(t_exec));
 	init_exec(data);
-	while(data->exec->status < data->exec->nb_cmd)
+	if (data->exec->nb_cmd == 1)
 	{
-		//if (data->exec->nb_cmd > 1)
-			//pipe(data->exec->pipefd);
-		data->exec->pid[data->exec->status] = fork();
-		if (!data->exec->pid[data->exec->status])
+		data->exec->pid[0] = fork();
+		if (!data->exec->pid[0])
 		{
 			init_child(data);
+			if (data->exec->child[0].infile)
+				dup2(data->exec->child[0].infile, STDIN_FILENO);
+			if (data->exec->child[0].outfile)
+				dup2(data->exec->child[0].outfile, STDOUT_FILENO);
 			children(data);
 		}
-		//open_pipe(data);
-		waitpid(data->exec->pid[data->exec->status], NULL, 0);
-		data->exec->status += 1;
+		else
+			waitpid(data->exec->pid[0], NULL, 0);
+	}
+	else
+	{
+		while(data->exec->status < data->exec->nb_cmd)
+		{
+			pipe(data->exec->pipefd);
+			data->exec->pid[data->exec->status] = fork();
+			open_pipe(data);
+			data->exec->status += 1;
+		}
 	}
 	free(data->exec->pid);
 	free(data->exec->child);
 }
 
-/*void	open_pipe(t_data *data)
+void	open_pipe(t_data *data)
 {
 	int	i;
 
 	i = data->exec->status;
 	if (!data->exec->pid[i])
 	{
-		if (data->exec->nb_cmd > 1)
+		init_child(data);
+		//printf("ok\n");
+		if (data->exec->child[i].pipein)
 		{
-			init_child(data);
-			children(data);
+			printf("%d : lis dans le pipe\n", i);
+			dup2(data->exec->pipefd[0], STDIN_FILENO);
+			close(data->exec->pipefd[1]);
+		}
+		else if (data->exec->child[i].std_in)
+		{
+			printf("%d : lis dans l'entree std\n", i);
+			dup2(STDIN_FILENO, STDIN_FILENO);
+			close(data->exec->pipefd[0]);
 		}
 		else
 		{
-			init_child(data);
-			if (data->exec->child[i].pipein)
-				//dup2(data->exec->pipefd[0], STDIN_FILENO);
-			if (data->exec->child[i].pipeout)
-				//dup2(data->exec->pipefd[1], STDOUT_FILENO);
-			children(data);
+			printf("%d : lis dans un fichier\n", i);
+			dup2(data->exec->child[i].infile, STDIN_FILENO);
+			close(data->exec->pipefd[0]);
 		}
+		if (data->exec->child[i].pipeout)
+		{
+			printf("%d : ecrit dans le pipe\n", i);
+			dup2(data->exec->pipefd[1], STDOUT_FILENO);
+		}
+		else if (data->exec->child[i].std_out)
+		{
+			printf("%d : ecrit dans la sortie std\n", i);
+			dup2(STDOUT_FILENO, STDOUT_FILENO);
+		}
+		else
+		{
+			printf("%d : ecrit dans un fichier\n", i);
+			dup2(data->exec->child[i].outfile, STDOUT_FILENO);
+		}
+		children(data);
 	}
 	else
 	{
@@ -62,7 +95,7 @@ void	exec_arg(t_data *data)
 		//close(data->exec->pipefd[1]);
 		waitpid(data->exec->pid[i], NULL, 0);
 	}
-}*/
+}
 
 void	children(t_data *data)
 {
