@@ -47,16 +47,21 @@ Et la structure me permet d'aller directement chercher les elements necessaire, 
 Note :
 
 Pour le moment on peut lancer des commandes "basique".
-C'est a dire juste une commande seule ou suivi d'un arg ou d'un argument.
+C'est a dire juste une commande seule ou suivi d'un arg et/ou d'un argument.
+Avec redirection ">", "<", ">>" et "<<".
 
 Exemples :
 
 - cat
-- cat -e
 - echo "Hello!"
 - sleep 5
 - clear
-- ls
-- ls -l
-- wc
-- wc -l
+- ls -l > fileout
+- < filein wc -l
+- << stop wc -l > fileout
+- < filein cat -e >> fileout
+
+Probleme :
+
+Apres plusieurs "ls -l >> fileout", ls -l s'execute dans fileout.
+- cat << stop > fileout

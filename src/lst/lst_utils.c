@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 11:21:57 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/12 11:24:49 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/15 17:56:17 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_a_cmd(char *str)
 	char	*path_cmd;
 	int		i;
 
-	path = ft_split(getenv("PATH"), ':');	
+	path = ft_split(getenv("PATH"), ':');
 	i = 0;
 	while (path[i] != NULL)
 	{
@@ -27,7 +27,11 @@ int	is_a_cmd(char *str)
 		path_cmd = ft_strjoin(tmp, str);
 		free(tmp);
 		if (access(path_cmd, 0) == 0)
+		{
+			free(path_cmd);
+			free_tab(path);
 			return (1);
+		}
 		free(path_cmd);
 		i++;
 	}
@@ -48,6 +52,23 @@ int	is_an_arg(t_arg **lst)
 		return (0);
 	else if (!ft_strncmp(tmp->prev->status, "cmd", 3))
 		return (1);
+	else if (tmp->prev->prev == NULL)
+		return (0);
+	else if (!ft_strncmp(tmp->prev->status, "flag", 5)
+			&& !ft_strncmp(tmp->prev->prev->status, "cmd", 4))
+				return (1);
+	return (0);
+}
+
+int	is_a_limiter(t_arg **lst)
+{
+	t_arg	*tmp;
+	
+	tmp = *lst;
+	if (tmp->prev == NULL)
+		return (0);
+	else if (!ft_strncmp(tmp->prev->data, "<<", 3))
+		return (1);
 	return (0);
 }
 
@@ -60,8 +81,7 @@ int	is_a_file(t_arg **lst)
 		return (0);
 	else if (tmp->prev->token > 0 && tmp->prev->token < 5)
 		return (1);
-	else
-		return (0);
+	return (0);
 }
 
 void	print_lst(t_arg *lst)
@@ -70,18 +90,29 @@ void	print_lst(t_arg *lst)
 		ft_printf("lst is NULL\n");
 	while (lst != NULL)
 	{
-		printf("id = %d\nstatus = %s\ndata = %s\n", lst->id, lst->status, lst->data);
+		printf("id = %d\ndata = %s\nstatus = %s\n", lst->id, lst->data, lst->status);
 		if (!ft_strncmp(lst->status, "cmd", 4))
 		{
-			printf("infile = %s\noutfile = %s\n", lst->infile, lst->outfile);
-			if (lst->pipein == true)
+			if (lst->flag)
+				printf("flag = %s\n", lst->flag);
+			if (lst->arg)
+				printf("arg = %s\n", lst->arg);
+			if (lst->infile)
+				printf("infile = %s\n", lst->infile);
+			else if (lst->pipein == true)
 				printf("pipein = true\n");
+			else if (lst->heredoc)
+				printf("heredoc mode = true\nlimiter = %s\n", lst->heredoc);
 			else
-				printf("pipein = false\n");
-			if (lst->pipeout == true)
+				printf("stdin = true\n");
+			if (lst->outfile)
+				printf("outfile = %s\n", lst->outfile);
+			else if (lst->pipeout == true)
 				printf("pipeout = true\n");
 			else
-				printf("pipeout = false\n");
+				printf("stdout = true\n");
+			if (lst->append == true)
+				printf("append mode = true\n");
 		}
 		if (!ft_strncmp(lst->status, "token", 6))
 			printf("token = %d\n", lst->token);
@@ -98,6 +129,31 @@ void	free_lst(t_arg **s)
 	{
 		clean = *s;
 		*s = (*s)->next;
+		if (!ft_strncmp(clean->status, "cmd", 4))
+		{
+			free(clean->arg);
+			free(clean->flag);
+			if (clean->infile)
+				free(clean->infile);
+			if (clean->outfile)
+				free(clean->outfile);
+			if (clean->heredoc)
+				free(clean->heredoc);
+		}
+		free(clean->status);
 		free(clean);
 	}
+}
+
+void	free_tab(char **tabtab)
+{
+	int	i;
+
+	i = 0;
+	while (tabtab[i] != NULL)
+	{
+		free(tabtab[i]);
+		i++;
+	}
+	free(tabtab);
 }

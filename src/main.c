@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/12 17:32:44 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/15 18:17:44 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	minishell_loop(t_data *data)
 	add_history(prompt);
 	arg = ft_split(prompt, ' ');
 	create_lst(&data->lst, arg);
+	free(arg);
 	//print_lst(data->lst);
 	exec_arg(data);
 	free_lst(&data->lst);

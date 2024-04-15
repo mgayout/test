@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/12 12:29:04 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/15 17:54:24 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,18 @@
 typedef struct s_arg
 {
 	int				id;
-	char			*status;
-	int				token;
-	int				builtins;
 	char			*data;
+	char			*status;
+//	int				builtins;
+	char			*flag;
+	char			*arg;
 	char			*infile;
 	char			*outfile;
 	bool			pipein;
 	bool			pipeout;
+	char			*heredoc;
+	bool			append;
+	int				token;
 	struct s_arg	*next;
 	struct s_arg	*prev;
 }					t_arg;
@@ -60,18 +64,12 @@ typedef struct s_exec
 
 typedef struct s_pid
 {
-	char		*cmd;
-	char		*arg;
-	char		*flag;
-	char		*arg1;
-	char		**arg2;
-	int			infile;
-	int			outfile;
-	bool		std_in;
-	bool		std_out;
-	bool		pipein;
-	bool		pipeout;
-}				t_pid;
+	struct s_arg	*lst;
+	char			*arg1;
+	char			**arg2;
+	int				infile;
+	int				outfile;
+}					t_pid;
 
 typedef struct s_data
 {
@@ -88,13 +86,14 @@ void	minishell_loop(t_data *data);
 
 void	create_lst(t_arg **lst, char **arg);
 void	fill_status(t_arg *lst);
-void	fill_in_out(t_arg *lst);
+void	fill_cmd(t_arg *lst);
 
 //LST_FILL
 
 void	fill_list(t_arg **lst, char *str);
 char	*status_lst(t_arg *lst);
 int		token_lst(char *str);
+void	flag_arg(t_arg *lst);
 void	before_cmd(t_arg *lst);
 void	after_cmd(t_arg *lst);
 
@@ -102,9 +101,11 @@ void	after_cmd(t_arg *lst);
 
 int		is_a_cmd(char *str);
 int		is_an_arg(t_arg **lst);
+int		is_a_limiter(t_arg **lst);
 int		is_a_file(t_arg **lst);
 void	print_lst(t_arg *lst);
 void	free_lst(t_arg **s);
+void	free_tab(char **tabtab);
 
 //LST_FUNCTION
 
@@ -125,5 +126,6 @@ t_arg	*good_cmd(t_data *data);
 
 void	init_exec(t_data *data);
 void	init_child(t_data *data);
+void	init_heredoc(t_data *data);
 
 #endif

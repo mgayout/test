@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:27:23 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/12 11:26:35 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/15 18:18:23 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	create_lst(t_arg **lst, char **arg)
 		i++;
 	}
 	fill_status(*lst);
-	fill_in_out(*lst);
+	fill_cmd(*lst);
 }
 
 void	fill_status(t_arg *lst)
@@ -35,12 +35,13 @@ void	fill_status(t_arg *lst)
 	}
 }
 
-void	fill_in_out(t_arg *lst)
+void	fill_cmd(t_arg *lst)
 {
 	while (lst != NULL)
 	{
 		if (!ft_strncmp(lst->status, "cmd", 4))
 		{
+			flag_arg(lst);
 			before_cmd(lst);
 			after_cmd(lst);
 		}

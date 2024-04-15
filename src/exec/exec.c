@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:29:25 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/12 18:20:24 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/15 18:27:50 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ void	exec_arg(t_data *data)
 		if (!data->exec->pid[0])
 		{
 			init_child(data);
+			if (data->exec->child[0].lst->heredoc)
+			{
+				init_heredoc(data);
+				data->exec->child[0].infile = open(".temp", O_RDONLY);
+			}
 			if (data->exec->child[0].infile)
 				dup2(data->exec->child[0].infile, STDIN_FILENO);
 			if (data->exec->child[0].outfile)
@@ -41,8 +46,11 @@ void	exec_arg(t_data *data)
 			data->exec->status += 1;
 		}
 	}
+	close(data->exec->child[data->exec->status].infile);
+	close(data->exec->child[data->exec->status].outfile);
 	free(data->exec->pid);
 	free(data->exec->child);
+	free(data->exec);
 }
 
 void	open_pipe(t_data *data)
@@ -53,47 +61,48 @@ void	open_pipe(t_data *data)
 	if (!data->exec->pid[i])
 	{
 		init_child(data);
-		//printf("ok\n");
-		if (data->exec->child[i].pipein)
+		if (data->exec->child[i].lst->infile)
 		{
-			printf("%d : lis dans le pipe\n", i);
-			dup2(data->exec->pipefd[0], STDIN_FILENO);
-			close(data->exec->pipefd[1]);
 		}
-		else if (data->exec->child[i].std_in)
+		else if (data->exec->child[i].lst->heredoc)
 		{
-			printf("%d : lis dans l'entree std\n", i);
-			dup2(STDIN_FILENO, STDIN_FILENO);
-			close(data->exec->pipefd[0]);
-		}
-		else
-		{
-			printf("%d : lis dans un fichier\n", i);
+			//printf("%d : lis dans le heredoc\n", i);
+			init_heredoc(data);
+			data->exec->child[i].infile = open(".temp", O_RDONLY);
 			dup2(data->exec->child[i].infile, STDIN_FILENO);
 			close(data->exec->pipefd[0]);
 		}
-		if (data->exec->child[i].pipeout)
+		else if (data->exec->child[i].lst->pipein)
 		{
-			printf("%d : ecrit dans le pipe\n", i);
-			dup2(data->exec->pipefd[1], STDOUT_FILENO);
-		}
-		else if (data->exec->child[i].std_out)
-		{
-			printf("%d : ecrit dans la sortie std\n", i);
-			dup2(STDOUT_FILENO, STDOUT_FILENO);
 		}
 		else
 		{
-			printf("%d : ecrit dans un fichier\n", i);
+
+		}
+		if (data->exec->child[i].lst->outfile)
+		{
+			//printf("%d : ecrit dans un fichier\n", i);
 			dup2(data->exec->child[i].outfile, STDOUT_FILENO);
+		}
+		else if (data->exec->child[i].lst->pipeout)
+		{
+			//printf("%d : ecrit dans le pipe\n", i);
+			dup2(data->exec->pipefd[1], STDOUT_FILENO);
+		}
+		else
+		{
+			
 		}
 		children(data);
 	}
 	else
 	{
-		//dup2(data->exec->pipefd[0], STDIN_FILENO);
-		//close(data->exec->pipefd[1]);
+		dup2(data->exec->pipefd[0], STDIN_FILENO);
+		close(data->exec->pipefd[1]);
 		waitpid(data->exec->pid[i], NULL, 0);
+		//usleep(50000);
+		//waitpid(-1, NULL, 0);
+		//close(data->exec->child[i].outfile);
 	}
 }
 
@@ -106,7 +115,7 @@ void	children(t_data *data)
 	j = 0;
 	i = data->exec->status;
 	exec = data->exec;
-	exec->child[i].arg1 = ft_arg1(exec->child[i].cmd);
+	exec->child[i].arg1 = ft_arg1(exec->child[i].lst->data);
 	//printf("arg1 = %s\n", exec->child[i].arg1);
 	exec->child[i].arg2 = ft_arg2(data);
 	while (exec->child[i].arg2[j])
@@ -114,6 +123,7 @@ void	children(t_data *data)
 		//printf("arg2 = %s\n", exec->child[i].arg2[j]);
 		j++;
 	}
+	//write(STDOUT_FILENO, "ok", 2);
 	execve(exec->child[i].arg1, exec->child[i].arg2, data->envp);
 }
 
@@ -148,37 +158,29 @@ char	**ft_arg2(t_data *data)
 	int		i;
 
 	i = data->exec->status;
-	if (data->exec->child[i].arg)
+	if (data->exec->child[i].lst->flag && !data->exec->child[i].lst->arg)
 	{
-		tmp = ft_strjoin(data->exec->child[i].cmd, " ");
-		tmp = ft_strjoin(tmp, data->exec->child[i].arg);
+		tmp = ft_strjoin(data->exec->child[i].lst->data, " ");
+		tmp = ft_strjoin(tmp, data->exec->child[i].lst->flag);
 		arg2 = ft_split(tmp, ' ');
 	}
-	else if (data->exec->child[i].flag)
+	else if (data->exec->child[i].lst->flag && data->exec->child[i].lst->data)
 	{
-		tmp = ft_strjoin(data->exec->child[i].cmd, " ");
-		tmp = ft_strjoin(tmp, data->exec->child[i].flag);
+		tmp = ft_strjoin(data->exec->child[i].lst->data, " ");
+		tmp = ft_strjoin(tmp, data->exec->child[i].lst->flag);
+		tmp = ft_strjoin(tmp, " ");
+		tmp = ft_strjoin(tmp, data->exec->child[i].lst->arg);
+		arg2 = ft_split(tmp, ' ');
+	}
+	else if (data->exec->child[i].lst->arg)
+	{
+		tmp = ft_strjoin(data->exec->child[i].lst->data, " ");
+		tmp = ft_strjoin(tmp, data->exec->child[i].lst->arg);
 		arg2 = ft_split(tmp, ' ');
 	}
 	else
-		arg2 = ft_split(data->exec->child[i].cmd, ' ');
+		arg2 = ft_split(data->exec->child[i].lst->data, ' ');
 	return (arg2);
-	/*if (lst->next != NULL && !ft_strncmp(lst->next->status, "flag", 5))
-	{
-		tmp = ft_strdup(lst->data);
-		lst = lst->next;
-		tmp = ft_strjoin(tmp, " ");
-		tmp = ft_strjoin(tmp, lst->data);
-		tmp = ft_strjoin(tmp, " ");
-		arg2 = ft_split(tmp, ' ');
-	}
-	else
-	{
-		arg2 = malloc(sizeof(char *) * 2);
-		arg2[0] = ft_strdup(lst->data);;
-		arg2[1] = NULL;
-	}
-	return (arg2);*/
 }
 
 t_arg	*good_cmd(t_data *data)

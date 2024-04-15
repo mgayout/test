@@ -2,3 +2,4 @@
 < filein ls -l | wc -l > fileout
 < filein ls -l > fileout
 ls -l > fileout
+<< stop cat -e | wc -l >> fileout
