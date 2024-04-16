@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/15 18:13:24 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/16 13:28:11 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	init_child(t_data *data)
 				data->exec->child[i].infile = open(tmp->infile, O_RDONLY);
 			if (tmp->outfile && tmp->append)
 				data->exec->child[i].outfile = open(tmp->outfile, O_WRONLY | O_CREAT | O_APPEND, 0640);
-			else
+			else if (tmp->outfile && !tmp->append)
 				data->exec->child[i].outfile = open(tmp->outfile, O_RDWR | O_TRUNC | O_CREAT, 0640);
 			return ;
 		}
