@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 09:26:03 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/17 13:07:00 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_arg
 	int				id;
 	char			*data;
 	char			*status;
-//	int				builtins;
+	int				builtins;
 	char			*flag;
 	char			*arg;
 	char			*infile;
@@ -90,22 +90,27 @@ void	minishell_loop(t_data *data);
 void	create_lst(t_arg **lst, char **arg);
 void	fill_status(t_arg *lst);
 void	fill_cmd(t_arg *lst);
-
-//LST_FILL
-
 void	fill_list(t_arg **lst, char *str);
+void	set_lstargs(t_arg **lst, t_arg *new, char *str);
+
+//LST_ARGS
+
 char	*status_lst(t_arg *lst);
 int		token_lst(char *str);
 void	flag_arg(t_arg *lst);
 void	before_cmd(t_arg *lst);
 void	after_cmd(t_arg *lst);
 
-//LST_UTILS
+//LST_IS_A
 
 int		is_a_cmd(char *str);
+void	is_a_builtins(t_arg *lst);
 int		is_an_arg(t_arg **lst);
 int		is_a_limiter(t_arg **lst);
 int		is_a_file(t_arg **lst);
+
+//LST_UTILS
+
 void	print_lst(t_arg *lst);
 void	free_lst(t_arg **s);
 void	free_tab(char **tabtab);
@@ -118,17 +123,58 @@ int		lstsize(t_arg *lst);
 
 //EXEC
 
-void	exec_arg(t_data *data);
-void	open_pipe(t_data *data);
-void	children(t_data *data);
-char	*ft_arg1(char *str);
-char	**ft_arg2(t_data *data);
-t_arg	*good_cmd(t_data *data);
+void	exec(t_data *data);
+void	exec_a_cmd(t_data *data);
+void	exec_pipeline(t_data *data);
 
 //EXEC_INIT
 
 void	init_exec(t_data *data);
 void	init_child(t_data *data);
 void	init_heredoc(t_data *data);
+
+//EXEC_OPEN
+
+void	open_pipe(t_data *data);
+void	open_infile(t_data *data);
+void	open_outfile(t_data *data);
+void	open_files(t_data *data);
+
+//EXEC_CMD
+
+void	children(t_data *data);
+char	*ft_arg1(char *str);
+char	**ft_arg2(t_data *data);
+
+//BUILTINS
+
+void	exec_builtins(t_data *data);
+
+//ECHO
+
+void	echo_builtin(t_data *data);
+
+//CD
+
+int		cd_builtin(void);
+
+//PWD
+
+int		pwd_builtin(void);
+
+//EXPORT
+
+int		export_builtin(void);
+
+//UNSET
+
+int		unset_builtin(void);
+
+//ENV
+int		env_builtin(void);
+
+//EXIT
+
+int		exit_builtin(void);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/17 09:26:39 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/17 12:50:08 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,24 +18,39 @@ MINIFLAG = -lreadline -g3
 SRC_DIR = src/
 SRC_LST_DIR = src/lst/
 SRC_EXEC_DIR = src/exec/
+SRC_BUIL_DIR = src/builtins/
 OBJ_DIR = obj/
 LIBFT = libft+/libft.a
 
 SRC =	main \
 
 SRC_LST =	lst_init \
-			lst_fill \
 			lst_utils \
 			lst_function \
+			lst_args \
+			lst_is_a \
 
 SRC_EXEC =	exec \
 			exec_init \
+			exec_pipe \
+			exec_cmd \
+
+SRC_BUIL =	builtins \
+			echo \
+			cd \
+			pwd \
+			export \
+			unset \
+			env \
+			exit \
 
 SRCS =	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC)))
 
 SRCS_LST =	$(addprefix $(SRC_LST_DIR), $(addsuffix .c, $(SRC_LST)))
 		
 SRCS_EXEC =	$(addprefix $(SRC_EXEC_DIR), $(addsuffix .c, $(SRC_EXEC)))
+
+SRCS_BUIL = $(addprefix $(SRC_BUIL_DIR), $(addsuffix .c, $(SRC_BUIL)))
 
 #OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC)))
 
@@ -45,7 +60,7 @@ $(LIBFT):
 	make -C libft+/
 
 $(NAME):
-	@$(CC) $(SRCS) $(SRCS_LST) $(SRCS_EXEC) $(LIBFT) $(CFLAGS) $(MINIFLAG) -o $(NAME) 
+	@$(CC) $(SRCS) $(SRCS_LST) $(SRCS_EXEC) $(SRCS_BUIL) $(LIBFT) $(CFLAGS) $(MINIFLAG) -o $(NAME) 
 
 #$(OBJ_DIR)%.o: $(SRC_DIR)%.c
 #	mkdir -p $(@D)

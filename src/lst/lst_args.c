@@ -1,53 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_fill.c                                         :+:      :+:    :+:   */
+/*   lst_args.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 11:25:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/15 14:56:41 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/17 12:43:46 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	fill_list(t_arg **lst, char *str)
-{
-	t_arg	*new;
-	t_arg	*tmp;
-
-	if (!lst)
-		return ;
-	new = malloc(sizeof(t_arg));
-	if (!new)
-		return ;
-	new->id = lstsize(*lst) + 1;
-	new->data = str;
-	new->flag = NULL;
-	new->arg = NULL;
-	new->infile = NULL;
-	new->outfile = NULL;
-	new->pipein = false;
-	new->pipeout = false;
-	new->append = false;
-	new->heredoc = NULL;
-	new->token = token_lst(new->data);
-	new->next = NULL;
-	new->prev = NULL;
-	if (!(*lst))
-		*lst = new;
-	else
-	{
-		tmp = lstlast(*lst);
-		new->prev = tmp;
-		tmp->next = new;
-	}
-}
-
 char	*status_lst(t_arg *lst)
 {
-	//printf("data prev = %s && new = %s\n", lst->prev->data, lst->data);
 	if (lst->token > 0)
 		return (ft_strdup("token"));
 	if (is_a_cmd(lst->data))
@@ -83,7 +49,7 @@ int	token_lst(char *str)
 void	flag_arg(t_arg *lst)
 {
 	t_arg	*tmp;
-	
+
 	tmp = lst->next;
 	if (!tmp)
 		return ;
@@ -100,7 +66,7 @@ void	flag_arg(t_arg *lst)
 void	before_cmd(t_arg *lst)
 {
 	t_arg	*tmp;
-	
+
 	tmp = lst;
 	while (tmp != NULL)
 	{
