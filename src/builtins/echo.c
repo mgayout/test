@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:45:51 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:46:11 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/17 16:45:55 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	echo_builtin(t_data *data)
 {
-	char	c;
+	//char	c;
 	int		i;
 
-	c = '%';
+	//c = '%';
 	i = data->exec->status;
 	if (!data->exec->child[i].lst->flag)
 		printf("%s\n", data->exec->child[i].lst->arg);
-	else
-		if (!ft_strncmp(data->exec->child[i].lst->flag, "-n", 3))
-			printf("%s%c\n", data->exec->child[i].lst->arg, c);
+	//else
+		//if (!ft_strncmp(data->exec->child[i].lst->flag, "-n", 3))
+			//printf("%s%c\n", data->exec->child[i].lst->arg, c);
 }

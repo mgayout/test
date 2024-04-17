@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/17 12:50:08 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/17 16:44:19 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ OBJ_DIR = obj/
 LIBFT = libft+/libft.a
 
 SRC =	main \
+		split_env \
+		env_var \
 
 SRC_LST =	lst_init \
 			lst_utils \

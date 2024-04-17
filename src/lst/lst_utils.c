@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 11:21:57 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:42:43 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/17 15:41:25 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	print_lst(t_arg *lst)
 		if (!ft_strncmp(lst->status, "cmd", 4))
 		{
 			if (lst->builtins > 0)
-				printf("builtins = %d", lst->builtins);
+				printf("builtins = %d\n", lst->builtins);
 			if (lst->flag)
 				printf("flag = %s\n", lst->flag);
 			if (lst->arg)

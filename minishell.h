@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 13:07:00 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/17 17:17:31 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
+
+typedef struct s_env
+{
+	char			*name;
+	char			**value;
+	struct s_env	*next;
+	struct s_env	*prev;
+}				t_env;
 
 typedef struct s_arg
 {
@@ -77,6 +85,7 @@ typedef struct s_pid
 typedef struct s_data
 {
 	char			**envp;
+	struct s_env	*env;
 	struct s_arg	*lst;
 	struct s_exec	*exec;
 }					t_data;
@@ -84,6 +93,21 @@ typedef struct s_data
 //MAIN
 
 void	minishell_loop(t_data *data);
+
+//SPLIT_ENV
+
+void	split_env(t_data *data);
+void	fill_env(t_env **env, char *envp);
+void	print_env(t_env *env);
+t_env	*envlast(t_env *lst);
+int		envsize(t_env *lst);
+
+//ENV_VAR
+
+void	env_var(t_data *data, char **arg);
+int		is_an_env_var(t_env *env, char *str);
+char	*strenv_var(t_env *env, char *str);
+char	*strjoin_tab(char **value);
 
 //LST_INIT
 
