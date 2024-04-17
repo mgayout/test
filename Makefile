@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/12 12:24:29 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/17 09:26:39 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRC_DIR = src/
 SRC_LST_DIR = src/lst/
 SRC_EXEC_DIR = src/exec/
 OBJ_DIR = obj/
-LIBFT = libft-/libft.a
+LIBFT = libft+/libft.a
 
 SRC =	main \
 
@@ -42,7 +42,7 @@ SRCS_EXEC =	$(addprefix $(SRC_EXEC_DIR), $(addsuffix .c, $(SRC_EXEC)))
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	make -C libft-/
+	make -C libft+/
 
 $(NAME):
 	@$(CC) $(SRCS) $(SRCS_LST) $(SRCS_EXEC) $(LIBFT) $(CFLAGS) $(MINIFLAG) -o $(NAME) 
@@ -53,11 +53,11 @@ $(NAME):
 
 clean:
 #	$(RM) $(OBJ_DIR)
-	make clean -C libft-/
+	make clean -C libft+/
 
 fclean: clean
 	$(RM) $(NAME)
-	make fclean -C libft-/
+	make fclean -C libft+/
 
 re: fclean all
 

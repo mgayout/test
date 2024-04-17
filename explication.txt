@@ -12,22 +12,27 @@ Pour chaque arg j'assigne :
 
 - (int) un ID = numero de l'element.
 
-- (char *) un status = ex : cmd, file, arg, flag ou token.
-
 - (char *) une data = l'argument.
+
+- (char *) un status = ex : cmd, file, arg, flag ou token.
 
 Si l'argument est une commande :
 
-- (int) un infile = fichier d'entree.
+- (char *) un flag = (ex: ls -a, cat -e, wc -l).
 
-- (int) un outfile = fichier de sortie.
+- (char *) un argument = (ex: sleep 5, echo "Hello!").
 
-- (bool) un pipein (true) = doit lire dans un pipe.
+- (char *) un infile = fichier d'entree.
 
-- (bool) un pipeout (true) = doit ecrire dans un pipe.
+- (char *) un outfile = fichier de sortie.
 
-Si infile est NULL et que pipein est false = la commande doit lire dans l'entree std.
-Si outfile est NULL et que pipeout est false = la commande doit ecrire dans la sortie std.
+- (bool) un pipein = doit lire dans un pipe.
+
+- (bool) un pipeout = doit ecrire dans un pipe.
+
+- (char *) heredoc = delimiter du heredoc.
+
+- (bool) append = ne supprime pas le contenu du outfile quand il ecrit.
 
 Si l'argument est un token :
 
@@ -35,33 +40,40 @@ Si l'argument est un token :
 
 Partie EXEC :
 
-Je cree une structure pour chaque cmd.
-Et la structure me permet d'aller directement chercher les elements necessaire, c'est a dire :
+Je cree une structure principale dans laquelle je stock :
 
-- la cmd.
+- mes pipes.
 
-- le flag (ex : -l), l'argument (ex : echo "Bonjour!").
+- mon entree et sortie standart.
 
-- et les redirections (fichiers d'entree, de sortie, pipe d'entree, de sortie, entree std, sortie std).
+- mes pid.
+
+- le nombre de cmd et d'argument.
+
+Je cree une structure (child) pour chaque cmd, dans laquelle je stock :
+
+- la liste contenant les informations de ma commande (nom de la comande, flag, argument, infile, outfile, etc...)
+
+- mes fd infile/outfile.
+
+- mes arguments 1 et 2 pour la fonction execve.
 
 Note :
 
-Pour le moment on peut lancer des commandes "basique".
-C'est a dire juste une commande seule ou suivi d'un arg et/ou d'un argument.
-Avec redirection ">", "<", ">>" et "<<".
+Le programme devrait fonctionner avec n'importe quel type de commandes, sauf cas particuliers.
 
-Exemples :
+Exemples de cmd:
 
 - cat
-- echo "Hello!"
 - sleep 5
-- clear
 - ls -l > fileout
 - < filein wc -l
 - << stop wc -l > fileout
 - < filein cat -e >> fileout
+- << stop ls -a | cat | cat | cat |cat | ... | cat >> fileout
 
 Probleme :
 
-Apres plusieurs "ls -l >> fileout", ls -l s'execute dans fileout.
+Probleme d'execution quand la commande est mise avant le heredoc, comme par exemple :
+
 - cat << stop > fileout

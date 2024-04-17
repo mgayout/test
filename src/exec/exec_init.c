@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/16 13:28:11 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/17 09:03:32 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ void	init_exec(t_data *data)
 	data->exec->status = 0;
 	data->exec->nb_arg = lstsize(tmp);
 	data->exec->nb_cmd = 0;
+	data->exec->std_in = dup(0);
+	data->exec->std_out = dup(1);
+	data->exec->heredoc = false;
 	while (tmp != NULL)
 	{
 		if (!ft_strncmp(tmp->status, "cmd", 4))

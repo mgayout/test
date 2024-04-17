@@ -6,16 +6,16 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/15 17:54:24 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/17 09:26:03 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft-/libft.h"
-# include "libft-/ft_printf+/ft_printf.h"
-# include "libft-/get_next_line+/get_next_line.h"
+# include "libft+/libft.h"
+# include "libft+/ft_printf+/ft_printf.h"
+# include "libft+/get_next_line+/get_next_line.h"
 
 # include <stdio.h>
 # include <readline/readline.h>
@@ -55,6 +55,9 @@ typedef struct s_arg
 typedef struct s_exec
 {
 	int				pipefd[2];
+	int				std_in;
+	int				std_out;
+	bool			heredoc;
 	int				*pid;
 	int				nb_cmd;
 	int				nb_arg;
