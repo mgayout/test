@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 /*Remove content from pointer to the end.*/
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+/*void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
 	t_list	*clean;
 
@@ -25,4 +25,4 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 		(*del)(clean->content);
 		free(clean);
 	}
-}
+}*/

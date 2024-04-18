@@ -13,7 +13,7 @@
 #include "libft.h"
 
 /*Return list size.*/
-int	ft_lstsize(t_list *lst)
+/*int	ft_lstsize(t_list *lst)
 {
 	int	size;
 
@@ -24,4 +24,4 @@ int	ft_lstsize(t_list *lst)
 		lst = lst->next;
 	}
 	return (size);
-}
+}*/

@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:37:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:43:28 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:46:34 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	is_a_cmd(char *str)
 	return (0);
 }
 
-void	is_a_builtins(t_arg *lst)
+void	is_a_builtins(t_lst *lst)
 {
 	if (!ft_strncmp(lst->data, "echo", 5))
 		lst->builtins = 1;
@@ -56,9 +56,9 @@ void	is_a_builtins(t_arg *lst)
 		lst->builtins = 7;
 }
 
-int	is_an_arg(t_arg **lst)
+int	is_an_arg(t_lst **lst)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 
 	tmp = *lst;
 	if (tmp->prev == NULL)
@@ -73,9 +73,9 @@ int	is_an_arg(t_arg **lst)
 	return (0);
 }
 
-int	is_a_limiter(t_arg **lst)
+int	is_a_limiter(t_lst **lst)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 
 	tmp = *lst;
 	if (tmp->prev == NULL)
@@ -85,9 +85,9 @@ int	is_a_limiter(t_arg **lst)
 	return (0);
 }
 
-int	is_a_file(t_arg **lst)
+int	is_a_file(t_lst **lst)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 
 	tmp = *lst;
 	if (tmp->prev == NULL)

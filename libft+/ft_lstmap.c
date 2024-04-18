@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 /*Return a copy of a list after a function has been applied to it.*/
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+/*t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*new_list;
 	t_list	*new_node;
@@ -38,3 +38,4 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	}
 	return (new_list);
 }
+*/

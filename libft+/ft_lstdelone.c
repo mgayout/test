@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 /*Remove 1 content.*/
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+/*void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
 	t_list	*delone;
 
@@ -25,3 +25,4 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *))
 	(*del)(delone->content);
 	free(delone);
 }
+*/

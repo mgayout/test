@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/18 14:09:02 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:45:21 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,24 @@
 
 void	minishell_loop(t_data *data)
 {
-	t_arg	*lst;
-	char	**arg;
+	//t_lst	*lst;
+	//char	**arg;
 	char	*prompt;
 
-	lst = NULL;
-	data->lst = lst;
+	//lst = NULL;
+	//data->lst = lst;
 	prompt = readline("minishell :");
 	add_history(prompt);
-	arg = ft_split(prompt, ' ');
+	//parser(data, prompt);
+	prompt = add_space(prompt);
+	printf("%s\n", prompt);
+	//arg = ft_split(prompt, ' ');
 	//env_var(data, arg);
-	create_lst(&data->lst, arg);
-	free(arg);
+	//create_lst(&data->lst, arg);
+	//free(arg);
 	//print_lst(data->lst);
-	exec(data);
-	free_lst(&data->lst);
+	//exec(data);
+	//free_lst(&data->lst);
 	minishell_loop(data);
 }
 

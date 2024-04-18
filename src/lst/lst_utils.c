@@ -6,13 +6,13 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 11:21:57 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 15:41:25 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:46:01 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	print_lst(t_arg *lst)
+void	print_lst(t_lst *lst)
 {
 	if (lst == NULL)
 		ft_printf("lst is NULL\n");
@@ -52,9 +52,9 @@ void	print_lst(t_arg *lst)
 	}
 }
 
-void	free_lst(t_arg **s)
+void	free_lst(t_lst **s)
 {
-	t_arg	*clean;
+	t_lst	*clean;
 
 	while (*s != NULL)
 	{

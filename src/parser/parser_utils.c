@@ -1,58 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_function.c                                     :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 14:51:51 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/18 17:47:07 by mgayout          ###   ########.fr       */
+/*   Created: 2024/04/18 16:15:45 by mgayout           #+#    #+#             */
+/*   Updated: 2024/04/18 17:58:11 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	lstadd_back(t_lst **lst, t_lst *new)
+int	tokenwoutsp_nb(char *str)
 {
-	t_lst	*back;
+	int	i;
+	int	nb_token;
 
-	if (!*lst)
-		*lst = new;
-	else
+	i = 0;
+	nb_token = 0;
+	while (str[i] != '\0')
 	{
-		back = lstlast(*lst);
-		back->next = new;
-	}
-}
-
-t_lst	*lstlast(t_lst *lst)
-{
-	t_lst	*last;
-	int		i;
-	int		j;
-
-	last = lst;
-	if (!last)
-		return (NULL);
-	i = 1;
-	j = lstsize(last);
-	while (i != j)
-	{
-		last = last->next;
+		if (str[i] == '>' || str[i] == '<')
+		{
+			if (i > 0)
+				if (!((str[i - 1] >= 9 && str[i - 1] <= 13) || str[i - 1] == ' '))
+					nb_token += 1;
+			if (!((str[i + 1] >= 9 && str[i + 1] <= 13) || str[i + 1] == ' '))
+				nb_token += 1;
+		}
 		i++;
 	}
-	return (last);
-}
-
-int	lstsize(t_lst *lst)
-{
-	int	size;
-
-	size = 0;
-	while (lst != NULL)
-	{
-		++size;
-		lst = lst->next;
-	}
-	return (size);
+	return (nb_token);
 }

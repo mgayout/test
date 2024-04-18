@@ -6,13 +6,13 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 11:25:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:43:46 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:47:13 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*status_lst(t_arg *lst)
+char	*status_lst(t_lst *lst)
 {
 	if (lst->token > 0)
 		return (ft_strdup("token"));
@@ -46,9 +46,9 @@ int	token_lst(char *str)
 		return (0);
 }
 
-void	flag_arg(t_arg *lst)
+void	flag_arg(t_lst *lst)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 
 	tmp = lst->next;
 	if (!tmp)
@@ -63,9 +63,9 @@ void	flag_arg(t_arg *lst)
 				lst->arg = ft_strdup(tmp->next->data);
 }
 
-void	before_cmd(t_arg *lst)
+void	before_cmd(t_lst *lst)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 
 	tmp = lst;
 	while (tmp != NULL)
@@ -91,9 +91,9 @@ void	before_cmd(t_arg *lst)
 	}
 }
 
-void	after_cmd(t_arg *lst)
+void	after_cmd(t_lst *lst)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 
 	tmp = lst;
 	while (tmp != NULL)

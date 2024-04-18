@@ -13,7 +13,7 @@
 #include "libft.h"
 
 /*Apply a function into content of a list.*/
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+/*void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
 	t_list	*iter;
 
@@ -24,3 +24,4 @@ void	ft_lstiter(t_list *lst, void (*f)(void *))
 		iter = iter->next;
 	}
 }
+*/

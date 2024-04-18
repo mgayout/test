@@ -6,13 +6,13 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:27:23 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 16:48:03 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:46:47 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	create_lst(t_arg **lst, char **arg)
+void	create_lst(t_lst **lst, char **arg)
 {
 	int		i;
 
@@ -26,7 +26,7 @@ void	create_lst(t_arg **lst, char **arg)
 	fill_cmd(*lst);
 }
 
-void	fill_status(t_arg *lst)
+void	fill_status(t_lst *lst)
 {
 	while (lst != NULL)
 	{
@@ -35,7 +35,7 @@ void	fill_status(t_arg *lst)
 	}
 }
 
-void	fill_cmd(t_arg *lst)
+void	fill_cmd(t_lst *lst)
 {
 	while (lst != NULL)
 	{
@@ -50,14 +50,14 @@ void	fill_cmd(t_arg *lst)
 	}
 }
 
-void	fill_list(t_arg **lst, char *str)
+void	fill_list(t_lst **lst, char *str)
 {
-	t_arg	*new;
-	t_arg	*tmp;
+	t_lst	*new;
+	t_lst	*tmp;
 
 	if (!lst)
 		return ;
-	new = malloc(sizeof(t_arg));
+	new = malloc(sizeof(t_lst));
 	if (!new)
 		return ;
 	set_lstargs(lst, new, str);
@@ -71,7 +71,7 @@ void	fill_list(t_arg **lst, char *str)
 	}
 }
 
-void	set_lstargs(t_arg **lst, t_arg *new, char *str)
+void	set_lstargs(t_lst **lst, t_lst *new, char *str)
 {
 	new->id = lstsize(*lst) + 1;
 	new->data = str;

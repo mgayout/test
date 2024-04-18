@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:55:31 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:26:51 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:47:30 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	children(t_data *data)
 	j = 0;
 	i = data->exec->status;
 	exec = data->exec;
-	exec->child[i].arg1 = ft_arg1(exec->child[i].lst->data);
+	exec->child[i].arg1 = ft_lst1(exec->child[i].lst->data);
 	//printf("arg1 = %s\n", exec->child[i].arg1);
-	exec->child[i].arg2 = ft_arg2(data);
+	exec->child[i].arg2 = ft_lst2(data);
 	while (exec->child[i].arg2[j])
 	{
 		//printf("arg2 = %s\n", exec->child[i].arg2[j]);
@@ -32,7 +32,7 @@ void	children(t_data *data)
 	execve(exec->child[i].arg1, exec->child[i].arg2, data->envp);
 }
 
-char	*ft_arg1(char *str)
+char	*ft_lst1(char *str)
 {
 	char	**path;
 	char	*tmp;
@@ -56,7 +56,7 @@ char	*ft_arg1(char *str)
 	return (NULL);
 }
 
-char	**ft_arg2(t_data *data)
+char	**ft_lst2(t_data *data)
 {
 	char	**arg2;
 	char	*tmp;

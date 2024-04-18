@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:15:23 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 17:47:32 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_exec(t_data *data)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 
 	tmp = data->lst;
 	data->exec->status = 0;
@@ -35,7 +35,7 @@ void	init_exec(t_data *data)
 
 void	init_child(t_data *data)
 {
-	t_arg	*tmp;
+	t_lst	*tmp;
 	int		cmd;
 	int		i;
 
