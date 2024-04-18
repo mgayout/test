@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 16:33:21 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 18:00:59 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/18 14:06:11 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ void	env_var(t_data *data, char **arg)
 	k = 0;
 	while (arg[k] != NULL)
 	{
-		j = 0;
+		j = 1;
 		while (arg[k][j] != '\0')
 		{
-			if (!ft_strncmp(&arg[k][j], "$", 1))
+			//printf("j = %d : %c\n", j, arg[k][j]);
+			if (!ft_strncmp(&arg[k][j - 1], "$", 1))
 			{
-				i = j + 1;
+				i = j;
 				while (arg[k][i] != ' ' && arg[k][i] != '\0' && arg[k][i] != '$')
 					i++;
-				if (arg[k][i] == '$')
-					i--;
+				//printf("i = %d : %c\n", i, arg[k][i]);
 				str = malloc(sizeof(char) * (i - j) + 1);
-				ft_strlcpy(str, &arg[k][j + 1], (i - j) + 1);
+				ft_strlcpy(str, &arg[k][j], (i - j) + 1);
 				if (is_an_env_var(data->env, str))
 				{
 					if (ft_strncmp(arg[k], strenv_var(data->env, str), ft_strlen(arg[k])))
@@ -44,8 +44,8 @@ void	env_var(t_data *data, char **arg)
 					else
 						ft_strjoin(arg[k], strenv_var(data->env, str));
 				}
-				printf("$ = %s\n", str);
-				printf("Value = %s\n", arg[k]);
+				//printf("$ = %s\n", str);
+				//printf("Value = %s\n", arg[k]);
 				free(str);
 			}
 			j++;
@@ -59,8 +59,9 @@ int	is_an_env_var(t_env *env, char *str)
 	while (env != NULL)
 	{
 		//printf("%s\n", env->name);
-		if (!ft_strncmp(env->name, str, ft_strlen(str)))
-			return (1);
+		if (!ft_strncmp(env->name, str, ft_strlen(env->name)))
+			if (!ft_strncmp(env->name, str, ft_strlen(str)))
+				return (1);
 		env = env->next;
 	}
 	return (0);
