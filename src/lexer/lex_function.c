@@ -1,18 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   lex_function.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/17 12:47:55 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:02:13 by mgayout          ###   ########.fr       */
+/*   Created: 2024/04/19 17:46:56 by mgayout           #+#    #+#             */
+/*   Updated: 2024/04/19 17:48:31 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "lexer.h"
 
-int	unset_builtin(void)
+t_lex	*lexlast(t_lex *lst)
 {
-	return (1);
+	t_lex	*last;
+	int		i;
+	int		j;
+
+	last = lst;
+	if (!last)
+		return (NULL);
+	i = 1;
+	j = lexsize(last);
+	while (i != j)
+	{
+		last = last->next;
+		i++;
+	}
+	return (last);
+}
+
+int	lexsize(t_lex *lst)
+{
+	int	size;
+
+	size = 0;
+	while (lst != NULL)
+	{
+		++size;
+		lst = lst->next;
+	}
+	return (size);
 }

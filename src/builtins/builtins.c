@@ -6,11 +6,11 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:53:04 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:48:34 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/19 12:01:42 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "builtins.h"
 
 void	exec_builtins(t_data *data)
 {

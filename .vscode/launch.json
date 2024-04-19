@@ -7,9 +7,9 @@
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "c:/Users/Maxime/OneDrive/Bureau/42/minishell2",
-      "program": "c:/Users/Maxime/OneDrive/Bureau/42/minishell2/build/Debug/outDebug",
+      "externalConsole": false,
+      "cwd": "/home/mgayout/Desktop/42/minishell",
+      "program": "/home/mgayout/Desktop/42/minishell/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

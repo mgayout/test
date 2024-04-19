@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 15:20:41 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 16:08:25 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/19 11:12:45 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	fill_env(t_env **env, char *envp)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return ;
-	new->name = malloc(sizeof(char *) * i + 1);
+	new->name = malloc(sizeof(char) * i + 1);
 	ft_strlcpy(new->name, envp, i + 1);
 	new->value = ft_split(&envp[i + 1], ':');
 	if (!(*env))

@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/18 17:44:22 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/19 11:13:51 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 CC = gcc
 RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror
-MINIFLAG = -lreadline -g3
+MINIFLAG = -lreadline -g
 SRC_DIR = src/
 SRC_PAR_DIR = src/parser/
 SRC_LST_DIR = src/lst/

@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/17 12:47:55 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:02:13 by mgayout          ###   ########.fr       */
+/*   Created: 2024/04/19 11:55:30 by mgayout           #+#    #+#             */
+/*   Updated: 2024/04/19 11:56:03 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#ifndef PARSER_H
+# define PARSER_H
 
-int	unset_builtin(void)
-{
-	return (1);
-}
+# include "../../minishell.h"
+
+
+
+#endif

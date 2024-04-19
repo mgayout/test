@@ -6,11 +6,11 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:46:59 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/17 12:47:11 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/19 12:02:10 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "builtins.h"
 
 int	pwd_builtin(void)
 {

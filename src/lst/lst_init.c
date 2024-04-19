@@ -6,11 +6,11 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:27:23 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/18 17:46:47 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/19 12:01:02 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "lst.h"
 
 void	create_lst(t_lst **lst, char **arg)
 {

@@ -6,11 +6,11 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:37:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/18 17:46:34 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/19 12:01:06 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "lst.h"
 
 int	is_a_cmd(char *str)
 {
