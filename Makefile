@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/19 11:13:51 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/23 13:01:02 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror
 MINIFLAG = -lreadline -g
 SRC_DIR = src/
+SRC_LEX_DIR = src/lexer/
 SRC_PAR_DIR = src/parser/
 SRC_LST_DIR = src/lst/
 SRC_EXEC_DIR = src/exec/
@@ -26,6 +27,10 @@ LIBFT = libft+/libft.a
 SRC =	main \
 		split_env \
 		env_var \
+
+SRC_LEX =	lexer \
+			lex_utils \
+			lex_function \
 
 SRC_PAR =	parser \
 			parser_utils \
@@ -52,6 +57,8 @@ SRC_BUIL =	builtins \
 
 SRCS =	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC)))
 
+SRCS_LEX = $(addprefix $(SRC_LEX_DIR), $(addsuffix .c, $(SRC_LEX)))
+
 SRCS_PAR = $(addprefix $(SRC_PAR_DIR), $(addsuffix .c, $(SRC_PAR)))
 
 SRCS_LST =	$(addprefix $(SRC_LST_DIR), $(addsuffix .c, $(SRC_LST)))
@@ -59,6 +66,8 @@ SRCS_LST =	$(addprefix $(SRC_LST_DIR), $(addsuffix .c, $(SRC_LST)))
 SRCS_EXEC =	$(addprefix $(SRC_EXEC_DIR), $(addsuffix .c, $(SRC_EXEC)))
 
 SRCS_BUIL = $(addprefix $(SRC_BUIL_DIR), $(addsuffix .c, $(SRC_BUIL)))
+
+SRCSS =	$(SRCS) $(SRCS_LEX) $(SRCS_PAR) $(SRCS_LST) $(SRCS_EXEC) $(SRCS_BUIL)
 
 #OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC)))
 
@@ -68,7 +77,7 @@ $(LIBFT):
 	make -C libft+/
 
 $(NAME):
-	@$(CC) $(SRCS) $(SRCS_PAR) $(SRCS_LST) $(SRCS_EXEC) $(SRCS_BUIL) $(LIBFT) $(CFLAGS) $(MINIFLAG) -o $(NAME) 
+	@$(CC) $(SRCSS) $(LIBFT) $(CFLAGS) $(MINIFLAG) -o $(NAME) 
 
 #$(OBJ_DIR)%.o: $(SRC_DIR)%.c
 #	mkdir -p $(@D)

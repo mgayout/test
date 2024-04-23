@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 18:07:37 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/23 16:57:01 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,28 @@
 # include <curses.h>
 # include <term.h>
 
+typedef enum e_lex_type
+{
+	REDIR = 1,
+	STRING,
+	PIPE,
+}	t_lex_type;
+
+typedef enum e_lex_redir
+{
+	INFILE = 1,
+	OUTFILE,
+	HEREDOC,
+	APPEND,
+}	t_lex_redir;
+
+typedef enum e_lex_quote
+{
+	NO_QUOTE = 1,
+	QUOTE,
+	DQUOTE,
+}	t_lex_quote;
+
 typedef struct s_env
 {
 	char			*name;
@@ -43,9 +65,11 @@ typedef struct s_env
 
 typedef struct s_lex
 {
-	t_tok_type		*type;
+	t_lex_type		type;
 	char			*data;
-	t_tok_redir		*redir;
+	t_lex_redir		redir;
+	int				*quote;
+	int				quote_id;
 	struct s_lex	*prev;
 	struct s_lex	*next;
 }					t_lex;
@@ -106,8 +130,6 @@ typedef struct s_data
 	struct s_env	*env;
 	char			*prompt;
 	struct s_lex	*lexer;
-	//struct s_lst	*lst;
-	//int			nb_part;
 	struct s_lst	*lst;
 	struct s_exec	*exec;
 }					t_data;

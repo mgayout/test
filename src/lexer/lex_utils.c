@@ -1,59 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lex_function.c                                     :+:      :+:    :+:   */
+/*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 17:46:56 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/23 14:49:14 by mgayout          ###   ########.fr       */
+/*   Created: 2024/04/23 12:59:36 by mgayout           #+#    #+#             */
+/*   Updated: 2024/04/23 17:38:13 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_lex	*lexlast(t_lex *lst)
+void	print_lex(t_data *data)
 {
-	t_lex	*last;
+	t_lex	*tmp;
 	int		i;
 	int		j;
 
-	last = lst;
-	if (!last)
-		return (NULL);
+	tmp = data->lexer;
 	i = 1;
-	j = lexsize(last);
-	while (i != j)
+	while (tmp != NULL)
 	{
-		last = last->next;
+		printf("lst n* %d\n", i);
+		printf("type = %d\n", tmp->type);
+		if (tmp->type == 1)
+			printf("redir = %d\n", tmp->redir);
+		else if (tmp->type == 2)
+		{
+			j = 0;
+			printf("data = %s\n", tmp->data);
+			while (j < tmp->quote_id)
+			{
+				printf("quote n* %d = %d\n", j + 1, tmp->quote[j]);	
+				j++;
+			}
+		}
+		tmp = tmp->next;
 		i++;
 	}
-	return (last);
-}
-
-int	lexsize(t_lex *lst)
-{
-	int	size;
-
-	size = 0;
-	while (lst != NULL)
-	{
-		++size;
-		lst = lst->next;
-	}
-	return (size);
-}
-
-void	lexadd_back(t_lex **lst, t_lex *new)
-{
-	t_lex	*last;
-
-	if (*lst != NULL)
-	{
-		last = *lst;
-		last = lexlast(*lst);
-		last->next = new;
-		return ;
-	}
-	*lst = new;
 }

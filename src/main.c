@@ -6,18 +6,22 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:59:24 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/23 14:57:16 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "lexer/lexer.h"
 
 void	minishell_loop(t_data *data)
 {
-	data->prompt = readline("minishell :");
-	add_history(data->prompt);
-	printf("%s\n", data->prompt);
-	lexer(data);
+	char	*prompt;
+	
+	prompt = readline("minishell :");
+	add_history(prompt);
+	printf("%s\n", prompt);
+	lexer(data, prompt);
+	print_lex(data);
 	//parser(data, prompt);
 	//arg = ft_split(prompt, ' ');
 	//env_var(data, arg);
