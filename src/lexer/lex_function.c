@@ -6,11 +6,26 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:46:56 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/23 14:49:14 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/24 15:44:55 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+t_lex	*new_lex(void)
+{
+	t_lex	*new;
+
+	new = (t_lex *)ft_calloc(1, sizeof(t_lex));
+	if (!new)
+		return (NULL);
+	new->data = NULL;
+	new->type = 0;
+	new->quote = 0;
+	new->next = NULL;
+	new->prev = NULL;
+	return (new);
+}
 
 t_lex	*lexlast(t_lex *lst)
 {

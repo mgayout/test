@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/23 16:57:01 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/24 14:40:56 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,26 +68,15 @@ typedef struct s_lex
 	t_lex_type		type;
 	char			*data;
 	t_lex_redir		redir;
-	int				*quote;
-	int				quote_id;
+	t_lex_quote		quote;
 	struct s_lex	*prev;
 	struct s_lex	*next;
 }					t_lex;
 
-/*typedef struct s_lst
-{
-	int				id;
-	char			*chardata;
-	struct s_arg	*data;
-	struct s_lst	*next;
-	struct s_lst	*prev;
-}					t_lst;*/
-
-typedef struct s_lst
+typedef struct s_par
 {
 	int				id;
 	char			*data;
-	char			*status;
 	int				builtins;
 	char			*flag;
 	char			*arg;
@@ -97,27 +86,24 @@ typedef struct s_lst
 	bool			pipeout;
 	char			*heredoc;
 	bool			append;
-	int				token;
-	struct s_lst	*next;
-	struct s_lst	*prev;
-}					t_lst;
+	struct s_par	*next;
+	struct s_par	*prev;
+}					t_par;
 
 typedef struct s_exec
 {
 	int				pipefd[2];
 	int				std_in;
 	int				std_out;
-	bool			heredoc;
 	int				*pid;
 	int				nb_cmd;
-	int				nb_arg;
 	int				status;
 	struct s_pid	*child;
 }					t_exec;
 
 typedef struct s_pid
 {
-	struct s_lst	*lst;
+	struct s_par	*lst;
 	char			*arg1;
 	char			**arg2;
 	int				infile;
@@ -128,29 +114,29 @@ typedef struct s_data
 {
 	char			**envp;
 	struct s_env	*env;
-	char			*prompt;
 	struct s_lex	*lexer;
-	struct s_lst	*lst;
-	struct s_exec	*exec;
+	struct s_par	*parser;
+	struct s_exe	*exec;
 }					t_data;
 
 //MAIN
 
 void	minishell_loop(t_data *data);
 
-//SPLIT_ENV
+//FREE
 
-void	split_env(t_data *data);
+void	free_all(t_data *data);
+void	free_env(t_env **env);
+void	free_lex(t_lex **lexer);
+void	free_tab(char **tabs);
+
+//ENV
+
+void	env(t_data *data);
 void	fill_env(t_env **env, char *envp);
 void	print_env(t_env *env);
 t_env	*envlast(t_env *lst);
 int		envsize(t_env *lst);
-
-//ENV_VAR
-
-void	env_var(t_data *data, char **arg);
-int		is_an_env_var(t_env *env, char *str);
-char	*strenv_var(t_env *env, char *str);
-char	*strjoin_tab(char **value);
+void	envadd_back(t_env **lst, t_env *new);
 
 #endif

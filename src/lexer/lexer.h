@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 12:09:22 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/23 17:50:34 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/24 17:18:05 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,39 @@
 //LEXER
 
 void	lexer(t_data *data, char *prompt);
-int		add_new_t_lex(t_lex **lexer, char *prompt);
+int		add_new_t_lex(t_data *data, t_lex **lexer, char *prompt);
+
+//LEX_TYPE
+
 int		token_type(t_lex *lexer, char *prompt);
-t_lex	*init_lexer(void);
-int		string_type(t_lex *lexer, char *prompt);
-int		*add_new_enum(t_lex *lexer, int *quote, t_lex_quote n);
-int		find_content(char *str, char *limiter, t_lex *lexer, int status);
+int		string_type(t_data *data, t_lex *lexer, char *prompt);
+
+//LEX_QUOTE
+
 int		count_quotes(char *prompt);
+int		data_no_quote(t_data *data, t_lex *lexer, char *prompt);
+int		data_quotes(t_data *data, t_lex *lexer, char *prompt, char *limiter);
+void	env_lex_data(t_lex *lexer, char prompt, int i);
+void	init_lex_data(t_lex *lexer, char *prompt, int i);
+void	join_lex_data(t_lex *lexer, char *prompt, int i);
+void	find_var(t_data *data, t_lex *lexer, char *prompt);
+char	*join_var_val(t_env *env);
+
+//LEX_ENV
+
+void	find_var(t_data *data, t_lex *lexer, char *prompt);
+char	*join_var_val(t_env *env);
+void	init_lex_data_env(t_lex *lexer, char *prompt, int i);
+void	join_lex_data_env(t_lex *lexer, char *prompt, int i);
 
 //LEX_UTILS
 
+int		check_dollar(char *prompt, int i);
 void	print_lex(t_data *data);
 
 //LEX_FUNCTION
 
+t_lex	*new_lex(void);
 t_lex	*lexlast(t_lex *lst);
 int		lexsize(t_lex *lst);
 void	lexadd_back(t_lex **lst, t_lex *new);

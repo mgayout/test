@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_env.c                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/17 15:20:41 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 11:12:45 by mgayout          ###   ########.fr       */
+/*   Created: 2024/04/24 14:08:47 by mgayout           #+#    #+#             */
+/*   Updated: 2024/04/24 14:14:44 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	split_env(t_data *data)
+void	env(t_data *data)
 {
-	t_env	*env;
 	int	i;
 
 	i = 0;
+	data->env = NULL;
 	while(data->envp[i] != NULL)
 	{
-		fill_env(&env, data->envp[i]);
+		fill_env(&data->env, data->envp[i]);
 		i++;
 	}
-	data->env = env;
 }
 
 void	fill_env(t_env **env, char *envp)
 {
 	t_env	*new;
-	t_env	*tmp;
 	int		i;
 
 	i = 0;
@@ -41,14 +39,9 @@ void	fill_env(t_env **env, char *envp)
 	new->name = malloc(sizeof(char) * i + 1);
 	ft_strlcpy(new->name, envp, i + 1);
 	new->value = ft_split(&envp[i + 1], ':');
-	if (!(*env))
-		*env = new;
-	else
-	{
-		tmp = envlast(*env);
-		new->prev = tmp;
-		tmp->next = new;
-	}
+	new->next = NULL;
+	new->prev = NULL;
+	envadd_back(env, new);
 }
 
 void	print_env(t_env *env)
@@ -98,4 +91,18 @@ int	envsize(t_env *lst)
 		lst = lst->next;
 	}
 	return (size);
+}
+
+void	envadd_back(t_env **lst, t_env *new)
+{
+	t_env	*last;
+
+	if (*lst != NULL)
+	{
+		last = *lst;
+		last = envlast(*lst);
+		last->next = new;
+		return ;
+	}
+	*lst = new;
 }
