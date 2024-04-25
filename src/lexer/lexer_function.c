@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:46:56 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/24 15:44:55 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 16:22:00 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	lexadd_back(t_lex **lst, t_lex *new)
 	{
 		last = *lst;
 		last = lexlast(*lst);
+		new->prev = last;
 		last->next = new;
 		return ;
 	}

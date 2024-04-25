@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lex_quote.c                                        :+:      :+:    :+:   */
+/*   lexer_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:39:13 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/24 17:22:36 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:32:51 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,61 +48,34 @@ int	count_quotes(char *prompt)
 	return (total);
 }
 
-int	data_no_quote(t_data *data, t_lex *lexer, char *prompt)
+int	data_no_quote(t_lex *lexer, char *prompt)
 {
 	int		i;
 
 	i = 0;
-	if (prompt[0] == '$')
-		i = 1;
-	while (prompt[i] && (!ft_strchr("$\"'><| \t\n\r\v\f", prompt[i])))
+	while (prompt[i] && (!ft_strchr("\"'><| \t\n\r\v\f", prompt[i])))
 		i++;
-	if (prompt[0] == '$')
-	{
-		find_var(data, lexer, &prompt[1]);
-		return(i);
-	}
 	if (!lexer->data)
 		init_lex_data(lexer, prompt, i);
 	else
-		join_lex_data(lexer, prompt, i);
+		join_lex_data(lexer, prompt, i);	
 	return (i);
 }
 
-
-int	data_quotes(t_data *data, t_lex *lexer, char *prompt, char *limiter)
+int	data_quotes(t_lex *lexer, char *prompt, char *limiter)
 {
 	int		i;
 
 	i = 0;
-	printf("start find prompt[i] = %c\n", prompt[i]);
 	while (prompt[i] && (!ft_strchr(limiter, prompt[i])))
 		i++;
 	if ((prompt[i] == '\'' || prompt[i] == '"'))
 		i++;
-	if (check_dollar(prompt, i))
-		env_lex_data(lexer, prompt, i);
+	if (!lexer->data)
+		init_lex_data(lexer, prompt, i);
 	else
-	{
-		if (!lexer->data)
-			init_lex_data(lexer, prompt, i);
-		else
-			join_lex_data(lexer, prompt, i);	
-	}
+		join_lex_data(lexer, prompt, i);	
 	return (i + 1);
-}
-
-void	env_lex_data(t_lex *lexer, char prompt, int j)
-{
-	char	*start;
-	int		i;
-
-	i = 0;
-	while (prompt[i] != '$')
-		i++;
-	start = ft_calloc(sizeof(char), (i + 1));
-	ft_strncpy(start, prompt, i);
-	
 }
 
 void	init_lex_data(t_lex *lexer, char *prompt, int i)
@@ -120,7 +93,6 @@ void	init_lex_data(t_lex *lexer, char *prompt, int i)
 		ft_strncpy(tmp, prompt, i - 1);
 	}
 	lexer->data = ft_strdup(tmp);
-	printf("data = %s\n", lexer->data);
 	free(tmp);
 }
 
@@ -143,7 +115,6 @@ void	join_lex_data(t_lex *lexer, char *prompt, int i)
 	if (ft_strlen(lexer->data) != 0 && lexer->type == STRING)
 		free(lexer->data);
 	lexer->data = ft_strdup(stock);
-	printf("data = %s\n", lexer->data);
 	free(stock);
 	free(tmp);
 }

@@ -6,13 +6,14 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/24 14:15:01 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:18:22 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "lexer/lexer.h"
 #include "parser/parser.h"
+#include "exec/exec.h"
 
 void	minishell_loop(t_data *data)
 {
@@ -21,12 +22,11 @@ void	minishell_loop(t_data *data)
 	prompt = readline("minishell :");
 	add_history(prompt);
 	lexer(data, prompt);
-	print_lex(data);
-	//parser(data, prompt);
-	//create_lst(&data->lst, arg);
-	//print_lst(data->lst);
-	//exec(data);
-	//free_lst(&data->lst);
+	//print_lex(data);
+	parser(data);
+	//print_par(data);
+	//expander(data);
+	exec(data);
 	free_all(data);
 	minishell_loop(data);
 }

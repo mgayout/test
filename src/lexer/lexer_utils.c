@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:59:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/24 17:17:22 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 13:11:17 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,30 @@
 
 int	check_dollar(char *prompt, int i)
 {
+	int	nb_dollar;
+	int	str_dollar;
 	int	j;
-
+	
+	nb_dollar = 0;
 	j = 0;
-	while (j != i)
+	while (j < i)
 	{
 		if (prompt[j] == '$')
-			return (1);
+		{
+			str_dollar = 0;
+			while (prompt[j] == '$')
+			{
+				j++;
+				str_dollar++;
+			}
+			if (str_dollar > 2)
+				nb_dollar = (str_dollar + 1) / 2;
+			else
+				nb_dollar++;
+		}
 		j++;
 	}
-	return (0);
+	return (nb_dollar);
 }
 
 void	print_lex(t_data *data)

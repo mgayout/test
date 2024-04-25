@@ -1,58 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_function.c                                     :+:      :+:    :+:   */
+/*   parser_function.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 14:51:51 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:00:58 by mgayout          ###   ########.fr       */
+/*   Created: 2024/04/25 14:26:15 by mgayout           #+#    #+#             */
+/*   Updated: 2024/04/25 17:27:50 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lst.h"
+#include "parser.h"
 
-void	lstadd_back(t_lst **lst, t_lst *new)
+t_par	*new_par(void)
 {
-	t_lst	*back;
+	t_par	*new;
 
-	if (!*lst)
-		*lst = new;
-	else
-	{
-		back = lstlast(*lst);
-		back->next = new;
-	}
-}
-
-t_lst	*lstlast(t_lst *lst)
-{
-	t_lst	*last;
-	int		i;
-	int		j;
-
-	last = lst;
-	if (!last)
+	new = (t_par *)ft_calloc(1, sizeof(t_par));
+	if (!new)
 		return (NULL);
-	i = 1;
-	j = lstsize(last);
-	while (i != j)
-	{
-		last = last->next;
-		i++;
-	}
-	return (last);
+	new->id = 0;
+	new->status = 0;
+	new->data = NULL;
+	new->cmd = NULL;
+	new->builtin = 0;
+	new->arg = NULL;
+	new->infile = NULL;
+	new->outfile = NULL;
+	new->pipein = false;
+	new->pipeout = false;
+	new->heredoc = NULL;
+	new->append = false;
+	new->next = NULL;
+	new->prev = NULL;
+	return (new);
 }
 
-int	lstsize(t_lst *lst)
+int	parsize(t_par *parser)
 {
 	int	size;
 
 	size = 0;
-	while (lst != NULL)
+	while (parser != NULL)
 	{
 		++size;
-		lst = lst->next;
+		parser = parser->next;
 	}
 	return (size);
 }

@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:53:27 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:01:31 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:34:10 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	open_pipe(t_data *data)
 	{
 		open_infile(data);
 		open_outfile(data);
-		if (data->exec->child[0].lst->builtins > 0)
+		if (data->exec->child[0].lst->builtin > 0)
 			exec_builtins(data);
 		else
 			children(data);

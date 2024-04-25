@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:55:31 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:01:20 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:47:10 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	children(t_data *data)
 {
-	t_exec	*exec;
+	t_exe	*exec;
 	int		i;
 	int		j;
 
 	j = 0;
 	i = data->exec->status;
 	exec = data->exec;
-	exec->child[i].arg1 = ft_lst1(exec->child[i].lst->data);
+	exec->child[i].arg1 = ft_lst1(exec->child[i].lst->cmd);
 	//printf("arg1 = %s\n", exec->child[i].arg1);
 	exec->child[i].arg2 = ft_lst2(data);
 	while (exec->child[i].arg2[j])
@@ -63,20 +63,12 @@ char	**ft_lst2(t_data *data)
 	int		i;
 
 	i = data->exec->status;
-	tmp = data->exec->child[i].lst->data;
-	if (data->exec->child[i].lst->flag)
-	{
-		tmp = ft_strjoin(tmp, " ");
-		tmp = ft_strjoin(tmp, data->exec->child[i].lst->flag);
-		arg2 = ft_split(tmp, ' ');
-	}
+	tmp = data->exec->child[i].lst->cmd;
 	if (data->exec->child[i].lst->arg)
 	{
 		tmp = ft_strjoin(tmp, " ");
 		tmp = ft_strjoin(tmp, data->exec->child[i].lst->arg);
-		arg2 = ft_split(tmp, ' ');
 	}
-	else if (!data->exec->child[i].lst->flag && !data->exec->child[i].lst->arg)
-		arg2 = ft_split(data->exec->child[i].lst->data, ' ');
+	arg2 = ft_split(tmp, ' ');
 	return (arg2);
 }

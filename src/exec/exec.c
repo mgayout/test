@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:29:25 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:01:34 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:11:30 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	exec(t_data *data)
 {
-	data->exec = malloc(sizeof(t_exec));
+	data->exec = malloc(sizeof(t_exe));
 	init_exec(data);
 	if (data->exec->nb_cmd == 1)
 		exec_a_cmd(data);
@@ -35,12 +35,12 @@ void	exec(t_data *data)
 
 void	exec_a_cmd(t_data *data)
 {
-	init_child(data);
+	data->exec->child[0].lst = data->parser;
 	data->exec->pid[0] = fork();
 	if (!data->exec->pid[0])
 	{
 		open_files(data);
-		if (data->exec->child[0].lst->builtins > 0)
+		if (data->exec->child[0].lst->builtin > 0)
 			exec_builtins(data);
 		else
 			children(data);

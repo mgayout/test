@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:55:09 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/24 11:39:10 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:07:48 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,77 @@
 
 void	parser(t_data *data)
 {
-	t_lex	*tmp;
-
-	tmp = data->lexer;
-	data->parser = malloc(sizeof(t_par));
-	while (tmp->next != NULL)
+	t_par	*par_tmp;
+	t_lex	*lex_tmp;
+	
+	data->parser = new_par();
+	par_tmp = data->parser;
+	lex_tmp = data->lexer;
+	while (lex_tmp != NULL)
 	{
-		addlex_topar(data, tmp);
-		tmp = tmp->next;
+		if (addlex_topar(par_tmp, lex_tmp))
+			par_tmp = par_tmp->next;
+		lex_tmp = lex_tmp->next;
 	}
 }
 
-void	addlex_topar(t_data *data, t_lex *lexer)
+int	addlex_topar(t_par *parser, t_lex *lexer)
 {
-	
+	if (parser->id == 0)
+		first_elem(parser, lexer);
+	else if (lexer->type != PIPE)
+		x_elem(parser, lexer);
+	else
+	{
+		last_elem(parser);
+		return (1);
+	}
+	return (0);
+}
+
+void	first_elem(t_par *parser, t_lex *lexer)
+{
+	if (parser->prev == NULL)
+		parser->id = 1;
+	else
+		parser->id = parser->prev->id + 1;
+	if (lexer->type == STRING)
+	{
+		parser->cmd = ft_strdup(lexer->data);
+		parser->builtin = is_a_builtin(lexer->data);
+		parser->data = ft_strdup(lexer->data);
+		parser->status = 1;
+	}
+	else if (lexer->type == REDIR)
+	{
+		if (lexer->redir == INFILE)
+			parser->data = ft_strdup("<");
+		else if (lexer->redir == OUTFILE)
+			parser->data = ft_strdup(">");
+		else if (lexer->redir == HEREDOC)
+			parser->data = ft_strdup("<<");
+		else if (lexer->redir == APPEND)
+			parser->data = ft_strdup(">>");
+		parser->status = 2;
+	}
+}
+
+void	x_elem(t_par *parser, t_lex *lexer)
+{
+	if (lexer->type == STRING)
+		add_string_par(parser, lexer);
+	else if (lexer->type == REDIR)
+		add_redir_par(parser, lexer);
+}
+
+void	last_elem(t_par *parser)
+{
+	t_par	*new;
+
+	new = new_par();
+	parser->pipeout = true;
+	parser->data = join_data_par(parser->data, "|");
+	new->pipein = true;
+	new->prev = parser;
+	parser->next = new;
 }

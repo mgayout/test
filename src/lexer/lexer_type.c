@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:26:41 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/24 17:01:27 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 14:12:03 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	token_type(t_lex *lexer, char *prompt)
 	return (0);
 }
 
-int	string_type(t_data *data, t_lex *lexer, char *prompt)
+int	string_type(t_lex *lexer, char *prompt)
 {
 	int	i;
 	int	quotes;
@@ -61,22 +61,19 @@ int	string_type(t_data *data, t_lex *lexer, char *prompt)
 		{
 			lexer->type = STRING;
 			lexer->quote = QUOTE;
-			i += data_quotes(data, lexer, prompt + (i + 1), "'");
-			printf("end find prompt[i] = %c\n", prompt[i]);
+			i += data_quotes(lexer, prompt + (i + 1), "'");
 		}
 		else if (prompt[i] == '"')
 		{
 			lexer->type = STRING;
 			lexer->quote = DQUOTE;
-			i += data_quotes(data, lexer, prompt + (i + 1), "\"");
-			printf("end find prompt[i] = %c\n", prompt[i]);
+			i += data_quotes(lexer, prompt + (i + 1), "\"");
 		}
 		else
 		{
 			lexer->type = STRING;
 			lexer->quote = NO_QUOTE;
-			i += data_no_quote(data, lexer, prompt + i);
-			printf("end find prompt[i] = %c\n", prompt[i]);
+			i += data_no_quote(lexer, prompt + i);
 		}
 	}
 	return (i);

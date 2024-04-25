@@ -6,53 +6,40 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:01:27 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:11:22 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "../parser/parser.h"
 
 void	init_exec(t_data *data)
 {
-	t_lst	*tmp;
-
-	tmp = data->lst;
 	data->exec->status = 0;
-	data->exec->nb_arg = lstsize(tmp);
-	data->exec->nb_cmd = 0;
+	data->exec->nb_cmd = parsize(data->parser);
 	data->exec->std_in = dup(0);
 	data->exec->std_out = dup(1);
 	data->exec->heredoc = false;
-	while (tmp != NULL)
-	{
-		if (!ft_strncmp(tmp->status, "cmd", 4))
-			data->exec->nb_cmd += 1;
-		tmp = tmp->next;
-	}
 	data->exec->pid = malloc(sizeof(int) * data->exec->nb_cmd);
 	data->exec->child = malloc(sizeof(t_pid) * data->exec->nb_cmd);
 }
 
 void	init_child(t_data *data)
 {
-	t_lst	*tmp;
-	int		cmd;
+	t_par	*tmp;
 	int		i;
 
+	tmp = data->parser;
 	i = data->exec->status;
-	cmd = 0;
-	tmp = data->lst;
 	while (tmp != NULL)
 	{
-		if (!ft_strncmp(tmp->status, "cmd", 4) && cmd == i)
+		if (i == (tmp->id - 1))
 		{
 			data->exec->child[i].lst = tmp;
 			if (tmp->heredoc)
 				data->exec->heredoc = true;
 			return ;
 		}
-		else if (!ft_strncmp(tmp->status, "cmd", 4) && cmd != i)
-			cmd++;
 		tmp = tmp->next;
 	}
 }

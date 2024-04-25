@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:54:23 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/19 12:06:34 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:27:10 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../../minishell.h"
 # include "../builtins/builtins.h"
-# include "../lst/lst.h"
 
 //EXEC
 

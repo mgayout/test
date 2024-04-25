@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/24 14:40:56 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/25 17:29:24 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,10 @@ typedef struct s_lex
 typedef struct s_par
 {
 	int				id;
+	int				status;
 	char			*data;
-	int				builtins;
-	char			*flag;
+	char			*cmd;
+	int				builtin;
 	char			*arg;
 	char			*infile;
 	char			*outfile;
@@ -90,16 +91,17 @@ typedef struct s_par
 	struct s_par	*prev;
 }					t_par;
 
-typedef struct s_exec
+typedef struct s_exe
 {
 	int				pipefd[2];
 	int				std_in;
 	int				std_out;
+	bool			heredoc;
 	int				*pid;
 	int				nb_cmd;
 	int				status;
 	struct s_pid	*child;
-}					t_exec;
+}					t_exe;
 
 typedef struct s_pid
 {
@@ -128,6 +130,7 @@ void	minishell_loop(t_data *data);
 void	free_all(t_data *data);
 void	free_env(t_env **env);
 void	free_lex(t_lex **lexer);
+void	free_par(t_par **parser);
 void	free_tab(char **tabs);
 
 //ENV

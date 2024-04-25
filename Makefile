@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/24 16:23:21 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/25 18:29:31 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,9 @@ MINIFLAG = -lreadline -g
 SRC_DIR = src/
 SRC_LEX_DIR = src/lexer/
 SRC_PAR_DIR = src/parser/
-SRC_LST_DIR = src/lst/
-SRC_EXEC_DIR = src/exec/
-SRC_BUIL_DIR = src/builtins/
+SRC_EXP_DIR = src/expander/
+SRC_EXE_DIR = src/exec/
+SRC_BUI_DIR = src/builtins/
 OBJ_DIR = obj/
 LIBFT = libft+/libft.a
 
@@ -28,28 +28,26 @@ SRC =	main \
 		env \
 		free \
 
-SRC_LEX =	lexer \
+SRC_LEX	=	lexer \
 			lex_type \
 			lex_quote \
 			lex_env \
 			lex_utils \
 			lex_function \
 
-#SRC_PAR =	parser \
+SRC_PAR =	parser \
 			parser_utils \
+			parser_function \
 
-#SRC_LST =	lst_init \
-			lst_utils \
-			lst_function \
-			lst_args \
-			lst_is_a \
+SRC_EXP =	expander \
+			expander_utils \
 
-#SRC_EXEC =	exec \
+SRC_EXE =	exec \
 			exec_init \
 			exec_pipe \
 			exec_cmd \
 
-#SRC_BUIL =	builtins \
+SRC_BUI =	builtins \
 			echo \
 			cd \
 			pwd \
@@ -64,13 +62,13 @@ SRCS_LEX = $(addprefix $(SRC_LEX_DIR), $(addsuffix .c, $(SRC_LEX)))
 
 SRCS_PAR = $(addprefix $(SRC_PAR_DIR), $(addsuffix .c, $(SRC_PAR)))
 
-SRCS_LST =	$(addprefix $(SRC_LST_DIR), $(addsuffix .c, $(SRC_LST)))
+SRCS_EXP =	$(addprefix $(SRC_EXP_DIR), $(addsuffix .c, $(SRC_EXP)))
 		
-SRCS_EXEC =	$(addprefix $(SRC_EXEC_DIR), $(addsuffix .c, $(SRC_EXEC)))
+SRCS_EXE =	$(addprefix $(SRC_EXE_DIR), $(addsuffix .c, $(SRC_EXE)))
 
-SRCS_BUIL = $(addprefix $(SRC_BUIL_DIR), $(addsuffix .c, $(SRC_BUIL)))
+SRCS_BUI = $(addprefix $(SRC_BUI_DIR), $(addsuffix .c, $(SRC_BUI)))
 
-SRCSS =	$(SRCS) $(SRCS_LEX) $(SRCS_PAR) $(SRCS_LST) $(SRCS_EXEC) $(SRCS_BUIL)
+SRCSS =	$(SRCS) $(SRCS_LEX) $(SRCS_PAR) $(SRCS_EXP) $(SRCS_EXE) $(SRCS_BUI)
 
 #OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC)))
 
