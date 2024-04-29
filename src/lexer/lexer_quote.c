@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:39:13 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 18:32:51 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 17:55:32 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,13 @@ int	count_quotes(char *prompt)
 {
 	int	i;
 	int status;
-	int	dquotes;
-	int	quotes;
-	int	total;
 
 	i = 0;
 	status = 0;
-	quotes = 0;
-	dquotes = 0;
 	while (prompt[i])
 	{
 		if (prompt[i] == '\'' && status != 2)
 		{
-			quotes++;
 			if (status == 0)
 				status = 1;
 			else
@@ -36,7 +30,6 @@ int	count_quotes(char *prompt)
 		}
 		else if (prompt[i] == '\"' && status != 1)
 		{
-			dquotes++;
 			if (status == 0)
 				status = 2;
 			else
@@ -44,8 +37,7 @@ int	count_quotes(char *prompt)
 		}
 		i++;
 	}
-	total = quotes + dquotes;
-	return (total);
+	return (status);
 }
 
 int	data_no_quote(t_lex *lexer, char *prompt)
@@ -56,9 +48,9 @@ int	data_no_quote(t_lex *lexer, char *prompt)
 	while (prompt[i] && (!ft_strchr("\"'><| \t\n\r\v\f", prompt[i])))
 		i++;
 	if (!lexer->data)
-		init_lex_data(lexer, prompt, i);
+		init_lex_data(lexer, prompt, i, NO_QUOTE);
 	else
-		join_lex_data(lexer, prompt, i);	
+		join_lex_data(lexer, prompt, i, NO_QUOTE);	
 	return (i);
 }
 
@@ -72,17 +64,17 @@ int	data_quotes(t_lex *lexer, char *prompt, char *limiter)
 	if ((prompt[i] == '\'' || prompt[i] == '"'))
 		i++;
 	if (!lexer->data)
-		init_lex_data(lexer, prompt, i);
+		init_lex_data(lexer, prompt, i, QUOTE);
 	else
-		join_lex_data(lexer, prompt, i);	
+		join_lex_data(lexer, prompt, i, QUOTE);	
 	return (i + 1);
 }
 
-void	init_lex_data(t_lex *lexer, char *prompt, int i)
+void	init_lex_data(t_lex *lexer, char *prompt, int i, t_lex_quote n)
 {
 	char	*tmp;
 
-	if (lexer->quote == NO_QUOTE)
+	if (n == NO_QUOTE)
 	{
 		tmp = ft_calloc(sizeof(char), (i + 1));
 		ft_strncpy(tmp, prompt, i);
@@ -96,12 +88,12 @@ void	init_lex_data(t_lex *lexer, char *prompt, int i)
 	free(tmp);
 }
 
-void	join_lex_data(t_lex *lexer, char *prompt, int i)
+void	join_lex_data(t_lex *lexer, char *prompt, int i, t_lex_quote n)
 {
 	char	*tmp;
 	char	*stock;
 
-	if (lexer->quote == NO_QUOTE)
+	if (n == NO_QUOTE)
 	{
 		tmp = ft_calloc(sizeof(char), (i + 1));
 		ft_strncpy(tmp, prompt, i);
@@ -117,4 +109,59 @@ void	join_lex_data(t_lex *lexer, char *prompt, int i)
 	lexer->data = ft_strdup(stock);
 	free(stock);
 	free(tmp);
+}
+
+char	*add_final_quote(char *prompt)
+{
+	char	*new_prompt;
+	char	*buf;
+	char	last_quote;
+	int		i;
+
+	i = 0;
+	write(1, "> ", 2);
+	buf = get_next_line(0);
+	last_quote = '\'';
+	if (count_quotes(prompt) == 2)
+		last_quote = '"';
+	while (prompt[i] && prompt[i] != last_quote)
+		i++;
+	//printf("i = %d\n", i);
+	if (prompt[i] == last_quote)
+		new_prompt = join_final_quote(prompt, buf, i);
+	else
+		new_prompt = ft_strjoin(prompt, buf);
+	free(buf);
+	//printf("%s\n", new_prompt);
+	return (new_prompt);
+}
+char	*join_final_quote(char *prompt, char *buf, int i)
+{
+	char	*new_prompt;
+	int		size;
+	int		j;
+	int		k;
+
+	j = 0;
+	k = 0;
+	size = ft_strlen(prompt) + ft_strlen(buf);
+	new_prompt = malloc(sizeof(char) * size + 2);
+	while (prompt[j])
+	{
+		new_prompt[j] = prompt[j];
+		j++;
+	}
+	while(buf[k])
+	{
+		if (k == i)
+		{
+			new_prompt[j + k] = '\n';
+			j++;
+		}
+		new_prompt[j + k] = buf[k];
+		k++;
+	}
+	new_prompt[j + k] = '\0';
+	printf("prompt = %s", new_prompt);
+	return (new_prompt);
 }

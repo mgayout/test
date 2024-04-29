@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lex_function.c                                     :+:      :+:    :+:   */
+/*   lexer_function.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:46:56 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 16:22:00 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 16:03:11 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_lex	*new_lex(void)
 		return (NULL);
 	new->data = NULL;
 	new->type = 0;
-	new->quote = 0;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);

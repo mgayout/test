@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lex_utils.c                                        :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:59:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 13:11:17 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 16:02:58 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,8 @@ void	print_lex(t_data *data)
 		printf("type = %d\n", tmp->type);
 		if (tmp->type == 1)
 			printf("redir = %d\n", tmp->redir);
-		else if (tmp->type == 2)
-		{
+		else if (tmp->type == 2)	
 			printf("data = %s\n", tmp->data);
-			printf("quote = %d\n", tmp->quote);	
-		}
 		tmp = tmp->next;
 		i++;
 	}

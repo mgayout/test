@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lex_type.c                                         :+:      :+:    :+:   */
+/*   lexer_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:26:41 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 14:12:03 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 17:49:57 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,67 +14,44 @@
 
 int	token_type(t_lex *lexer, char *prompt)
 {
+	lexer->type = REDIR;
 	if (!ft_strncmp(prompt, ">>", 2))
-	{
-		lexer->type = REDIR;
 		lexer->redir = APPEND;
-		return (2);
-	}
 	else if (!ft_strncmp(prompt, ">", 1))
-	{
-		lexer->type = REDIR;
 		lexer->redir = OUTFILE;
-		return (1);
-	}
 	else if (!ft_strncmp(prompt, "<<", 2))
-	{
-		lexer->type = REDIR;
 		lexer->redir = HEREDOC;
-		return (2);
-	}
 	else if (!ft_strncmp(prompt, "<", 1))
-	{
-		lexer->type = REDIR;
 		lexer->redir = INFILE;
-		return (1);
-	}
 	else if (!ft_strncmp(prompt, "|", 1))
-	{
 		lexer->type = PIPE;
-		return (1);
-	}
-	return (0);
+	if (!ft_strncmp(prompt, "<<", 2) || !ft_strncmp(prompt, ">>", 2))
+		return (2);
+	return (1);
 }
 
-int	string_type(t_lex *lexer, char *prompt)
+int	string_type(t_data *data, t_lex *lexer)
 {
 	int	i;
-	int	quotes;
 
-	quotes = count_quotes(prompt);
-	if (quotes % 2)
-		return (0);
 	i = 0;
-	while (prompt[i] && !ft_strchr("><| \t\n\r\v\f", prompt[i]))
+	lexer->type = STRING;
+	while (data->prompt[i] && !ft_strchr("><| \t\n\r\v\f", data->prompt[i]))
 	{
-		if (prompt[i] == '\'')
+		//printf("entree : %s\n", &prompt[i]);
+		if (data->prompt[i] == '\'' || data->prompt[i] == '"')
 		{
-			lexer->type = STRING;
-			lexer->quote = QUOTE;
-			i += data_quotes(lexer, prompt + (i + 1), "'");
-		}
-		else if (prompt[i] == '"')
-		{
-			lexer->type = STRING;
-			lexer->quote = DQUOTE;
-			i += data_quotes(lexer, prompt + (i + 1), "\"");
+			while (count_quotes(data->prompt))
+				data->prompt = add_final_quote(data->prompt);
+			//printf("mid : %s\n", data->prompt);
+			if (data->prompt[i] == '\'')
+				i += data_quotes(lexer, data->prompt + (i + 1), "'");
+			else if (data->prompt[i] == '"')
+				i += data_quotes(lexer, data->prompt + (i + 1), "\"");
 		}
 		else
-		{
-			lexer->type = STRING;
-			lexer->quote = NO_QUOTE;
-			i += data_no_quote(lexer, prompt + i);
-		}
+			i += data_no_quote(lexer, data->prompt + i);
+		//printf("sortie : %s\n", &prompt[i]);
 	}
 	return (i);
 }

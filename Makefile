@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/25 18:29:31 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/26 11:37:32 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,20 +26,20 @@ LIBFT = libft+/libft.a
 
 SRC =	main \
 		env \
+		check_errors \
 		free \
 
 SRC_LEX	=	lexer \
-			lex_type \
-			lex_quote \
-			lex_env \
-			lex_utils \
-			lex_function \
+			lexer_type \
+			lexer_quote \
+			lexer_utils \
+			lexer_function \
 
 SRC_PAR =	parser \
 			parser_utils \
 			parser_function \
 
-SRC_EXP =	expander \
+#SRC_EXP =	expander \
 			expander_utils \
 
 SRC_EXE =	exec \
@@ -47,14 +47,7 @@ SRC_EXE =	exec \
 			exec_pipe \
 			exec_cmd \
 
-SRC_BUI =	builtins \
-			echo \
-			cd \
-			pwd \
-			export \
-			unset \
-			env \
-			exit \
+SRC_BUI =	builtins echo cd pwd export unset env exit \
 
 SRCS =	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC)))
 

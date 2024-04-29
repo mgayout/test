@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:29:25 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 18:11:30 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 13:21:03 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,22 @@
 
 void	exec(t_data *data)
 {
-	data->exec = malloc(sizeof(t_exe));
-	init_exec(data);
+	data->exec = init_exe(data->parser);
+	//init_exec(data);
 	if (data->exec->nb_cmd == 1)
 		exec_a_cmd(data);
 	else
 		exec_pipeline(data);
 	dup2(data->exec->std_in, STDIN_FILENO);
 	dup2(data->exec->std_out, STDOUT_FILENO);
-	if (data->exec->pipefd[0] > 0)
-		close(data->exec->pipefd[0]);
-	if (data->exec->pipefd[1] > 0)
-		close(data->exec->pipefd[1]);
-	if (data->exec->heredoc)
-		unlink(".temp");
-	free(data->exec->pid);
-	free(data->exec->child);
-	free(data->exec->pipefd);
 }
 
 void	exec_a_cmd(t_data *data)
 {
 	data->exec->child[0].lst = data->parser;
 	data->exec->pid[0] = fork();
+	if (data->exec->child[0].lst->heredoc)
+		data->exec->heredoc = true;
 	if (!data->exec->pid[0])
 	{
 		open_files(data);

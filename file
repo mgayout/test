@@ -1,2 +1,1 @@
-< file1 ls -l | wc -l > file2
- | cat
+351

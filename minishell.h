@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 17:29:24 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 17:44:29 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@
 # include <curses.h>
 # include <term.h>
 
+typedef enum e_errors
+{
+	BEGIN_PIPE = 1,
+	END_TOKEN,
+	NO_EOF_DQ,
+	NO_EOF_Q,
+}	t_errors;
+
 typedef enum e_lex_type
 {
 	REDIR = 1,
@@ -52,7 +60,7 @@ typedef enum e_lex_quote
 {
 	NO_QUOTE = 1,
 	QUOTE,
-	DQUOTE,
+//	DQUOTE,
 }	t_lex_quote;
 
 typedef struct s_env
@@ -68,7 +76,7 @@ typedef struct s_lex
 	t_lex_type		type;
 	char			*data;
 	t_lex_redir		redir;
-	t_lex_quote		quote;
+	//t_lex_quote		quote;
 	struct s_lex	*prev;
 	struct s_lex	*next;
 }					t_lex;
@@ -116,6 +124,7 @@ typedef struct s_data
 {
 	char			**envp;
 	struct s_env	*env;
+	char			*prompt;
 	struct s_lex	*lexer;
 	struct s_par	*parser;
 	struct s_exe	*exec;
@@ -125,14 +134,6 @@ typedef struct s_data
 
 void	minishell_loop(t_data *data);
 
-//FREE
-
-void	free_all(t_data *data);
-void	free_env(t_env **env);
-void	free_lex(t_lex **lexer);
-void	free_par(t_par **parser);
-void	free_tab(char **tabs);
-
 //ENV
 
 void	env(t_data *data);
@@ -141,5 +142,20 @@ void	print_env(t_env *env);
 t_env	*envlast(t_env *lst);
 int		envsize(t_env *lst);
 void	envadd_back(t_env **lst, t_env *new);
+
+//CHECK_ERRORS
+
+int		check_lexer(t_lex *lexer);
+int		check_parser(t_par *parser);
+void	print_errors(t_errors n);
+
+//FREE
+
+void	free_all(t_data *data);
+void	free_env(t_env **env);
+void	free_lex(t_lex **lexer);
+void	free_par(t_par **parser);
+void	free_exe(t_exe **exec);
+void	free_tab(char **tabs);
 
 #endif

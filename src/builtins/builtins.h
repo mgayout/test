@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:51:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 17:42:50 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:34:23 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	exec_builtins(t_data *data);
 
 //ECHO
 
-int	echo_builtin(void);
+void	echo_builtin(t_par *lst);
 
 //CD
 

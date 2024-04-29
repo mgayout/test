@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:53:04 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 17:42:12 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 14:33:49 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	exec_builtins(t_data *data)
 
 	i = data->exec->status;
 	if (data->exec->child[i].lst->builtin == 1)
-		echo_builtin();
+		echo_builtin(data->exec->child[i].lst);
 	else if (data->exec->child[i].lst->builtin == 2)
 		cd_builtin();
 	else if (data->exec->child[i].lst->builtin == 3)

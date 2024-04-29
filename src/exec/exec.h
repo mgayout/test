@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:54:23 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 17:27:10 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/26 11:17:13 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	exec_pipeline(t_data *data);
 
 //EXEC_INIT
 
-void	init_exec(t_data *data);
+t_exe	*init_exe(t_par *parser);
 void	init_child(t_data *data);
 void	init_heredoc(t_data *data);
 
@@ -38,7 +38,7 @@ void	open_files(t_data *data);
 //EXEC_CMD
 
 void	children(t_data *data);
-char	*ft_lst1(char *str);
-char	**ft_lst2(t_data *data);
+char	*create_arg1(char *str);
+char	**create_arg2(t_data *data);
 
 #endif

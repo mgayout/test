@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 18:18:22 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:37:06 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,25 @@
 
 void	minishell_loop(t_data *data)
 {
-	char	*prompt;
-	
-	prompt = readline("minishell :");
-	add_history(prompt);
-	lexer(data, prompt);
-	//print_lex(data);
-	parser(data);
-	//print_par(data);
-	//expander(data);
-	exec(data);
-	free_all(data);
+	data->prompt = readline("minishell :");
+	if (ft_strlen(data->prompt))
+	{
+		add_history(data->prompt);
+		lexer(data);
+		//print_lex(data);
+		if (check_lexer(data->lexer))
+		{
+			parser(data);
+			//print_par(data);
+			exec(data);
+			/*if (check_parser(data->parser))
+			{
+				//expander(data);
+				exec(data);
+			}*/
+		}
+		free_all(data);	
+	}
 	minishell_loop(data);
 }
 
