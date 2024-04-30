@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:26:41 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 17:49:57 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/30 15:54:42 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,19 @@ int	string_type(t_data *data, t_lex *lexer)
 
 	i = 0;
 	lexer->type = STRING;
-	while (data->prompt[i] && !ft_strchr("><| \t\n\r\v\f", data->prompt[i]))
+	while (data->prompt[i] && !ft_strchr("><| \t\r\v\f", data->prompt[i]))
 	{
-		//printf("entree : %s\n", &prompt[i]);
 		if (data->prompt[i] == '\'' || data->prompt[i] == '"')
 		{
 			while (count_quotes(data->prompt))
-				data->prompt = add_final_quote(data->prompt);
-			//printf("mid : %s\n", data->prompt);
+				data->prompt = add_final_quote(data->prompt);	
 			if (data->prompt[i] == '\'')
-				i += data_quotes(lexer, data->prompt + (i + 1), "'");
+				i += data_quote(lexer, data->prompt + i, "'");
 			else if (data->prompt[i] == '"')
-				i += data_quotes(lexer, data->prompt + (i + 1), "\"");
+				i += data_quote(lexer, data->prompt + i, "\"");
 		}
 		else
-			i += data_no_quote(lexer, data->prompt + i);
-		//printf("sortie : %s\n", &prompt[i]);
+			i += data_noquote(lexer, data->prompt + i, "\"'><| \t\r\v\f");
 	}
 	return (i);
 }

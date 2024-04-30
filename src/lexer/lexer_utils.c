@@ -6,38 +6,38 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:59:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 16:02:58 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:53:48 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-int	check_dollar(char *prompt, int i)
+int	count_quotes(char *prompt)
 {
-	int	nb_dollar;
-	int	str_dollar;
-	int	j;
-	
-	nb_dollar = 0;
-	j = 0;
-	while (j < i)
+	int	i;
+	int status;
+
+	i = 0;
+	status = 0;
+	while (prompt[i])
 	{
-		if (prompt[j] == '$')
+		if (prompt[i] == '\'' && status != 2)
 		{
-			str_dollar = 0;
-			while (prompt[j] == '$')
-			{
-				j++;
-				str_dollar++;
-			}
-			if (str_dollar > 2)
-				nb_dollar = (str_dollar + 1) / 2;
+			if (status == 0)
+				status = 1;
 			else
-				nb_dollar++;
+				status = 0;
 		}
-		j++;
+		else if (prompt[i] == '\"' && status != 1)
+		{
+			if (status == 0)
+				status = 2;
+			else
+				status = 0;
+		}
+		i++;
 	}
-	return (nb_dollar);
+	return (status);
 }
 
 void	print_lex(t_data *data)

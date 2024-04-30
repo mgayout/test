@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 11:34:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 14:28:48 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:17:59 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	check_lexer(t_lex *lexer)
 {
 	if (lexer->type == PIPE)
 		print_errors(BEGIN_PIPE);
+	else if (lexlast(lexer)->type == PIPE)
+		print_errors(END_PIPE);
 	else if (lexlast(lexer)->type == REDIR)
 		print_errors(END_TOKEN);
 	else
@@ -25,16 +27,19 @@ int	check_lexer(t_lex *lexer)
 	return (0);
 }
 
-/*int	check_parser(t_par *parser)
+int	check_parser(t_par *parser)
 {
 	if (parser->data)
-	return (1);
-}*/
+		return (1);
+	return (0);
+}
 
 void	print_errors(t_errors n)
 {
 	if (n == BEGIN_PIPE)
 		printf("bash: syntax error near unexpected token `|'\n");
+	else if (n == END_PIPE)
+		printf("Ajoutez une fin de cmd.\n");
 	else if (n == END_TOKEN)
 		printf("bash: syntax error near unexpected token `newline'\n");
 	else if (n == NO_EOF_Q)

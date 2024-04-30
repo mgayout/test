@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/04/26 11:37:32 by mgayout          ###   ########.fr        #
+#    Updated: 2024/04/30 17:06:31 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC =	main \
 
 SRC_LEX	=	lexer \
 			lexer_type \
+			lexer_noquote \
 			lexer_quote \
 			lexer_utils \
 			lexer_function \
@@ -39,7 +40,7 @@ SRC_PAR =	parser \
 			parser_utils \
 			parser_function \
 
-#SRC_EXP =	expander \
+SRC_EXP =	expander \
 			expander_utils \
 
 SRC_EXE =	exec \

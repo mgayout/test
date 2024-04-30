@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 17:44:29 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:05:45 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 typedef enum e_errors
 {
 	BEGIN_PIPE = 1,
+	END_PIPE,
 	END_TOKEN,
 	NO_EOF_DQ,
 	NO_EOF_Q,
@@ -60,7 +61,6 @@ typedef enum e_lex_quote
 {
 	NO_QUOTE = 1,
 	QUOTE,
-//	DQUOTE,
 }	t_lex_quote;
 
 typedef struct s_env
@@ -76,7 +76,6 @@ typedef struct s_lex
 	t_lex_type		type;
 	char			*data;
 	t_lex_redir		redir;
-	//t_lex_quote		quote;
 	struct s_lex	*prev;
 	struct s_lex	*next;
 }					t_lex;

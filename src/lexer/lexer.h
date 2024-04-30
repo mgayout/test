@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 12:09:22 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 17:50:16 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:53:58 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,23 @@ int		add_new_t_lex(t_data *data, t_lex **lexer, char *prompt);
 int		token_type(t_lex *lexer, char *prompt);
 int		string_type(t_data *data, t_lex *lexer);
 
+//LEX_NOQUOTE
+
+int		data_noquote(t_lex *lexer, char *prompt, char *limiter);
+int		init_noquote(t_lex *lexer, char *prompt, char *limiter);
+int		join_noquote(t_lex *lexer, char *prompt, char *limiter);
+
 //LEX_QUOTE
 
-int		count_quotes(char *prompt);
-int		data_no_quote(t_lex *lexer, char *prompt);
-int		data_quotes(t_lex *lexer, char *prompt, char *limiter);
-void	init_lex_data(t_lex *lexer, char *prompt, int i, t_lex_quote n);
-void	join_lex_data(t_lex *lexer, char *prompt, int i, t_lex_quote n);
+int		data_quote(t_lex *lexer, char *prompt, char *limiter);
+int		init_quote(t_lex *lexer, char *prompt, char *limiter);
+int		join_quote(t_lex *lexer, char *prompt, char *limiter);
 char	*add_final_quote(char *prompt);
 char	*join_final_quote(char *prompt, char *buf, int i);
 
 //LEX_UTILS
 
-int		check_dollar(char *prompt, int i);
+int		count_quotes(char *prompt);
 void	print_lex(t_data *data);
 
 //LEX_FUNCTION
