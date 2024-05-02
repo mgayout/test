@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:15:45 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/02 14:54:48 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/02 17:50:01 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	add_string_par(t_par *parser, t_lex *lexer)
 	if (lexer->prev->type == REDIR)
 	{
 		if (lexer->prev->redir == INFILE)
-			parser->infile = ft_strdup(lexer->data);
+			parser->infile[nb_tab(parser->infile)] = ft_strdup(lexer->data);
 		else if (lexer->prev->redir == OUTFILE)
-			parser->outfile = ft_strdup(lexer->data);
+			parser->outfile[nb_tab(parser->infile)] = ft_strdup(lexer->data);
 		else if (lexer->prev->redir == HEREDOC)
-			parser->heredoc = ft_strdup(lexer->data);
+			parser->heredoc[nb_tab(parser->infile)] = ft_strdup(lexer->data);
 		else
-			parser->append = true;
+			parser->append[nb_tab(parser->infile)] = ft_strdup(lexer->data);
 	}
 	else if (lexer->prev->type == STRING)
 	{
@@ -35,11 +35,11 @@ void	add_string_par(t_par *parser, t_lex *lexer)
 				parser->arg = join_data_par(parser->arg, lexer->data);
 		}
 		else if (parser->status == 2)
-		if (lexer->prev->prev->type == REDIR)
-		{
-			parser->cmd = ft_strdup(lexer->data);
-			parser->status = 1;
-		}
+			if (lexer->prev->prev->type == REDIR)
+			{
+				parser->cmd = ft_strdup(lexer->data);
+				parser->status = 1;
+			}
 	}
 	parser->data = join_data_par(parser->data, lexer->data);
 }
@@ -116,6 +116,7 @@ char	*join_data_par(char *old, char *str)
 void	print_par(t_data *data)
 {
 	t_par	*tmp;
+	int		i;
 
 	tmp = data->parser;
 	while (tmp != NULL)
@@ -126,17 +127,45 @@ void	print_par(t_data *data)
 		printf("arg = %s\n", tmp->arg);
 		printf("builtin = %d\n", tmp->builtin);
 		if (tmp->infile)
-			printf("infile = %s\n", tmp->infile);
+		{
+			i = 0;
+			while (tmp->infile[i] != NULL)
+			{
+				printf("infile n*%d = %s\n", i + 1, tmp->infile[i]);
+				i++;
+			}
+		}
 		if (tmp->pipein)
 			printf("pipein true\n");
 		if (tmp->heredoc)
-			printf("heredoc limiter = %s\n", tmp->heredoc);
+		{
+			i = 0;
+			while (tmp->heredoc[i] != NULL)
+			{
+				printf("heredoc limiter n*%d = %s\n", i + 1, tmp->heredoc[i]);
+				i++;
+			}
+		}
 		if (tmp->outfile)
-			printf("outfile = %s\n", tmp->outfile);
+		{
+			i = 0;
+			while (tmp->outfile[i] != NULL)
+			{
+				printf("outfile n*%d = %s\n", i + 1, tmp->outfile[i]);
+				i++;
+			}
+		}
 		if (tmp->pipeout)
 			printf("pipeout true\n");
 		if (tmp->append)
-			printf("append true\n");
+		{
+			i = 0;
+			while (tmp->append[i] != NULL)
+			{
+				printf("append n*%d = %s\n", i + 1, tmp->append[i]);
+				i++;
+			}
+		}
 		printf("\n");
 		tmp = tmp->next;
 	}

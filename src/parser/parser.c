@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:55:09 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 15:10:28 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/02 17:28:07 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,19 @@ void	parser(t_data *data)
 	data->parser = new_par();
 	par_tmp = data->parser;
 	lex_tmp = data->lexer;
+	init_tab_in(par_tmp, lex_tmp);
+	init_tab_out(par_tmp, lex_tmp);
 	while (lex_tmp != NULL)
 	{
-		//printf("type = %d\n", lex_tmp->type);
-		//if (lex_tmp->type == STRING)
-			//printf("string = %s\n", lex_tmp->data);
 		if (addlex_topar(par_tmp, lex_tmp))
+		{
+			lex_tmp = lex_tmp->next;
 			par_tmp = par_tmp->next;
-		lex_tmp = lex_tmp->next;
+			init_tab_in(par_tmp, lex_tmp);
+			init_tab_out(par_tmp, lex_tmp);
+		}
+		else
+			lex_tmp = lex_tmp->next;
 	}
 }
 

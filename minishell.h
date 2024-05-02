@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/02 16:52:55 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/02 17:36:19 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,12 @@ typedef struct s_par
 	char			*cmd;
 	int				builtin;
 	char			*arg;
-	char			*infile;
-	char			*outfile;
+	char			**infile;
+	char			**outfile;
 	bool			pipein;
 	bool			pipeout;
-	char			*heredoc;
-	bool			append;
+	char			**heredoc;
+	char			**append;
 	struct s_par	*next;
 	struct s_par	*prev;
 }					t_par;
