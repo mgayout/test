@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:24:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/30 17:58:53 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/02 16:41:49 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	modify_parser(t_data *data, t_par *parser)
 {
 	if (ft_strchr(parser->cmd, '$'))
 		parser->cmd = env_var(data, parser->cmd);
-	else if (ft_strchr(parser->arg, '$'))
+	if (ft_strchr(parser->arg, '$'))
 		parser->arg = env_var(data, parser->arg);
-	else if (ft_strchr(parser->infile, '$'))
+	if (ft_strchr(parser->infile, '$'))
 		parser->infile = env_var(data, parser->infile);
-	else if (ft_strchr(parser->outfile, '$'))
+	if (ft_strchr(parser->outfile, '$'))
 		parser->outfile = env_var(data, parser->outfile);
-	else if (ft_strchr(parser->heredoc, '$'))
+	if (ft_strchr(parser->heredoc, '$'))
 		parser->heredoc = env_var(data, parser->heredoc);
 }
 
@@ -47,12 +47,14 @@ char	*env_var(t_data *data, char *str)
 
 	dollar = count_dollar(str);
 	j = 0;
-	printf("%d dollar\n", dollar);
+	//printf("%d dollar\n", dollar);
 	while (j < dollar)
 	{
 		i = 0;
+		//printf("str = %s\n", str);
 		while(str[i] != '$')
 			i++;
+		i++;
 		str = search_env_var(data, str, i);
 		j++;
 	}
@@ -65,19 +67,26 @@ char	*search_env_var(t_data *data, char *str, int i)
 	char	*env_name;
 	char	*new_str;
 	int		j;
+	int		k;
 	
 	env = data->env;
-	j = i + 1;
+	j = i;
 	while(!ft_strchr("$<>| \"'", str[j]))
 		j++;
-	env_name = malloc(sizeof(char) * j);
-	env_name = ft_strncpy(env_name, str + (i + 1), j);
+	env_name = malloc(sizeof(char) * (j - i) + 1);
+	k = i;
+	while(k != j)
+	{
+		env_name[k - i] = str[k];
+		k++;
+	}
+	env_name[k - i] = '\0';
 	new_str = NULL;
-	printf("%s\n", env_name);
+	//printf("%s%d\n", env_name, (int)ft_strlen(env_name));
 	while (env != NULL)
 	{
 		if (!ft_strncmp(env_name, env->name, ft_strlen(env_name)))
-			new_str = replace_str(str, env->value, i - 1, j);
+			new_str = replace_str(str, env->value, i, j);
 		env = env->next;
 	}
 	return (new_str);
@@ -91,6 +100,9 @@ char	*replace_str(char	*str, char	**value, int i, int j)
 	int		k;
 
 	k = 0;
+	begin = search_begin(str, i - 1);
+	new = NULL;
+	end = search_end(str, j);
 	while (value[k] != NULL)
 	{
 		if (!new)
@@ -100,21 +112,33 @@ char	*replace_str(char	*str, char	**value, int i, int j)
 			new = ft_strjoin(new, ":");
 			new = ft_strjoin(new, value[k]);
 		}
-		i++;
+		k++;
 	}
-	begin = ft_strjoin(search_begin(str, i), " ");
-	new = ft_strjoin(new, " ");
-	end = search_end(str, j);
-	new = ft_strjoin(ft_strjoin(begin, new), end);
+	if (!begin && end)
+		new = ft_strjoin(new, end);
+	else if (begin && !end)
+		new = ft_strjoin(begin, end);
+	else if (begin && end)
+		new = ft_strjoin(ft_strjoin(begin, new), end);
 	return (new);
 }
 
 char	*search_begin(char *str, int i)
 {
 	char	*begin;
+	int		j;
 
+	//printf("i = %d\n", i);
+	if (i == 0)
+		return (NULL);
 	begin = malloc(sizeof(char) * (i + 1));
-	begin = ft_strncpy(begin, str, i + 1);
+	j = 0;
+	while (i != j)
+	{
+		begin[j] = str[j];
+		j++;
+	}
+	begin[j] = '\0';
 	return (begin);
 }
 

@@ -18,6 +18,8 @@ char	*ft_strchr(char *str, int c)
 	unsigned int	i;
 
 	i = 0;
+	if (!str)
+		return (NULL);
 	while (str[i])
 	{
 		if (str[i] == (char)c)

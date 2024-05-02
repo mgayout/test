@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:15:45 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/30 16:07:14 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/02 14:54:48 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,21 +84,30 @@ char	*join_data_par(char *old, char *str)
 
 	i = 0;
 	j = 0;
-	size = ft_strlen(old) + ft_strlen(str);
+	if (!old)
+		size = ft_strlen(str);
+	else if (!str)
+		size = ft_strlen(old);
+	else if (!str && !old)
+		return (NULL);
+	else
+		size = ft_strlen(old) + ft_strlen(str);
 	new = malloc(sizeof(char) * (size + 2));
-	while (i < (int)ft_strlen(old))
-	{
-		new[i] = old[i];
-		i++;
-	}
+	if (old)
+		while (i < (int)ft_strlen(old))
+		{
+			new[i] = old[i];
+			i++;
+		}
 	new[i] = ' ';
 	i++;
-	while (j < (int)ft_strlen(str))
-	{
-		new[i] = str[j];
-		i++;
-		j++;
-	}
+	if (str)
+		while (j < (int)ft_strlen(str))
+		{
+			new[i] = str[j];
+			i++;
+			j++;
+		}
 	new[i] = '\0';
 	free(old);
 	return (new);
