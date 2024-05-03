@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 13:10:39 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 16:17:07 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@ t_exe	*init_exe(t_par *parser)
 	exec->nb_cmd = parsize(parser);
 	exec->std_in = dup(0);
 	exec->std_out = dup(1);
-	exec->heredoc = false;
 	exec->pid = malloc(sizeof(int) * exec->nb_cmd);
 	exec->child = malloc(sizeof(t_pid) * exec->nb_cmd);
 	return (exec);
 }
 
-void	init_child(t_data *data)
+/*void	init_child(t_data *data)
 {
 	t_par	*tmp;
 	int		i;
@@ -48,9 +47,9 @@ void	init_child(t_data *data)
 		}
 		tmp = tmp->next;
 	}
-}
+}*/
 
-void	init_heredoc(t_data *data)
+int	init_heredoc(t_data *data)
 {
 	t_pid	pid;
 	char	*buf;
@@ -62,8 +61,8 @@ void	init_heredoc(t_data *data)
 	{
 		write(1, "> ", 2);
 		buf = get_next_line(0);
-		if (ft_strncmp(buf, pid.lst->heredoc, ft_strlen(buf) - 1) == 0
-			&& ft_strlen(buf) == ft_strlen(pid.lst->heredoc) + 1)
+		if (ft_strncmp(buf, pid.lst->heredoc[0], ft_strlen(buf) - 1) == 0
+			&& ft_strlen(buf) == ft_strlen(pid.lst->heredoc[0]) + 1)
 			break ;
 		else
 			write(file, buf, ft_strlen(buf));
@@ -71,4 +70,5 @@ void	init_heredoc(t_data *data)
 	}
 	free(buf);
 	close(file);
+	return (open(".temp", O_RDONLY));
 }

@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:49:31 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 15:30:32 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 14:37:38 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	free_all(t_data *data)
 		free_lex(&data->lexer);
 	if (data->parser)
 		free_par(&data->parser);
-	if (data->exec)
-		free_exe(&data->exec);
+	//if (data->exec)
+		//free_exe(&data->exec);
 }
 
 void	free_env(t_env **env)
@@ -63,11 +63,13 @@ void	free_par(t_par **parser)
 		free(tmp->cmd);
 		free(tmp->arg);
 		if (tmp->infile)
-			free(tmp->infile);
-		if (tmp->infile)
-			free(tmp->outfile);
+			free_tab(tmp->infile);
+		if (tmp->outfile)
+			free_tab(tmp->outfile);
 		if (tmp->heredoc)
-			free(tmp->heredoc);
+			free_tab(tmp->heredoc);
+		if (tmp->append)
+			free_tab(tmp->append);
 		free(tmp);
 	}
 }
@@ -77,8 +79,8 @@ void	free_exe(t_exe **exec)
 	t_exe	*tmp;
 
 	tmp = *exec;
-	if (tmp->heredoc)
-		unlink(".temp");
+	//if (tmp->heredoc)
+		//unlink(".temp");
 	free(tmp->child);
 	free(tmp->pid);
 	free(tmp->pipefd);

@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:15:45 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/02 17:50:01 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 16:10:00 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,24 @@ void	add_string_par(t_par *parser, t_lex *lexer)
 	if (lexer->prev->type == REDIR)
 	{
 		if (lexer->prev->redir == INFILE)
-			parser->infile[nb_tab(parser->infile)] = ft_strdup(lexer->data);
-		else if (lexer->prev->redir == OUTFILE)
-			parser->outfile[nb_tab(parser->infile)] = ft_strdup(lexer->data);
+		{
+			parser->infile[parser->infile_count] = ft_strdup(lexer->data);
+			parser->infile_count++;	
+		}
 		else if (lexer->prev->redir == HEREDOC)
-			parser->heredoc[nb_tab(parser->infile)] = ft_strdup(lexer->data);
+		{
+			parser->heredoc[parser->heredoc_count] = ft_strdup(lexer->data);
+			parser->heredoc_count++;
+		}
 		else
-			parser->append[nb_tab(parser->infile)] = ft_strdup(lexer->data);
+		{
+			parser->outfile[parser->outfile_count] = ft_strdup(lexer->data);
+			if (lexer->prev->redir == OUTFILE)
+				parser->append[parser->outfile_count] = ft_strdup("false");
+			else
+				parser->append[parser->outfile_count] = ft_strdup("true");
+			parser->outfile_count++;
+		}
 	}
 	else if (lexer->prev->type == STRING)
 	{
@@ -152,20 +163,15 @@ void	print_par(t_data *data)
 			while (tmp->outfile[i] != NULL)
 			{
 				printf("outfile n*%d = %s\n", i + 1, tmp->outfile[i]);
+				if (!ft_strncmp(tmp->append[i], "true", ft_strlen("true")))
+					printf("append mode = true\n");
+				else
+					printf("append mode = false\n");
 				i++;
 			}
 		}
 		if (tmp->pipeout)
 			printf("pipeout true\n");
-		if (tmp->append)
-		{
-			i = 0;
-			while (tmp->append[i] != NULL)
-			{
-				printf("append n*%d = %s\n", i + 1, tmp->append[i]);
-				i++;
-			}
-		}
 		printf("\n");
 		tmp = tmp->next;
 	}

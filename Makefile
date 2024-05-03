@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/05/02 17:37:45 by mgayout          ###   ########.fr        #
+#    Updated: 2024/05/03 16:12:06 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,12 +40,13 @@ SRC_PAR =	parser \
 			parser_utils \
 			parser_function \
 
-#SRC_EXP =	expander \
+SRC_EXP =	expander \
 			expander_utils \
 
-#SRC_EXE =	exec \
+SRC_EXE =	exec \
 			exec_init \
-			exec_pipe \
+			exec_file \
+			exec_files \
 			exec_cmd \
 
 SRC_BUI =	builtins echo cd pwd export unset env exit \

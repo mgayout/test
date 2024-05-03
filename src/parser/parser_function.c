@@ -6,13 +6,13 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 14:26:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/02 17:58:21 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 16:10:14 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_par	*new_par(void)
+t_par	*new_par(t_lex *lexer)
 {
 	t_par	*new;
 
@@ -25,104 +25,70 @@ t_par	*new_par(void)
 	new->cmd = NULL;
 	new->builtin = 0;
 	new->arg = NULL;
-	//new->infile = NULL;
-	//new->outfile = NULL;
+	new->infile = init_tab(lexer, INFILE);
+	new->infile_count = 0;
+	new->heredoc = init_tab(lexer, HEREDOC);
+	new->heredoc_count = 0;
+	new->outfile = init_tab2(lexer, OUTFILE, APPEND);
+	new->outfile_count = 0;
+	new->append = init_tab2(lexer, APPEND, OUTFILE);
 	new->pipein = false;
 	new->pipeout = false;
-	//new->heredoc = NULL;
-	//new->append = false;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
 }
 
-void	init_tab_in(t_par *parser, t_lex *lexer)
+char	**init_tab(t_lex *lexer, t_lex_redir n)
 {
-	t_par	*tmp_par;
 	t_lex	*tmp_lex;
-	int		infile;
-	int		heredoc;
+	char	**new_tab;
+	int		count;
 	
-	infile = 0;
-	heredoc = 0;
-	tmp_par = parser;
+	count = 0;
 	tmp_lex = lexer;
 	while(tmp_lex != NULL)
 	{
-		if (tmp_lex->redir == INFILE)
-			infile++;
-		else if (tmp_lex->redir == HEREDOC)
-			heredoc++;
+		if (tmp_lex->redir == n)
+			count++;
 		else if (tmp_lex->type == PIPE)
 			break;
 		tmp_lex = tmp_lex->next;
 	}
-	if (infile == 0)
-		tmp_par->infile = ft_calloc(1, sizeof(char*));
+	if (count == 0)
+		new_tab = NULL;
 	else
 	{
-		tmp_par->infile = malloc(sizeof(char*) * infile + 1);
-		tmp_par->infile[infile + 1] = NULL;
+		new_tab = malloc(sizeof(char*) * (count + 1));
+		new_tab[count] = NULL;
 	}
-	if (heredoc == 0)
-		tmp_par->heredoc = ft_calloc(1, sizeof(char*));
-	else
-	{
-		tmp_par->heredoc = malloc(sizeof(char*) * heredoc + 1);
-		tmp_par->heredoc[heredoc + 1] = NULL;
-	}
-	printf("infile = %d\n", infile);
-	printf("heredoc = %d\n", heredoc);
+	return (new_tab);
 }
 
-void	init_tab_out(t_par *parser, t_lex *lexer)
+char	**init_tab2(t_lex *lexer, t_lex_redir n, t_lex_redir o)
 {
-	t_par	*tmp_par;
 	t_lex	*tmp_lex;
-	int		outfile;
-	int		append;
+	char	**new_tab;
+	int		count;
 	
-	outfile = 0;
-	append = 0;
-	tmp_par = parser;
+	count = 0;
 	tmp_lex = lexer;
 	while(tmp_lex != NULL)
 	{
-		if (tmp_lex->redir == OUTFILE)
-			outfile++;
-		else if (tmp_lex->redir == APPEND)
-			append++;
+		if (tmp_lex->redir == n || tmp_lex->redir == o)
+			count++;
 		else if (tmp_lex->type == PIPE)
 			break;
 		tmp_lex = tmp_lex->next;
 	}
-	if (outfile == 0)
-		tmp_par->outfile = ft_calloc(1, sizeof(char*));
+	if (count == 0)
+		new_tab = NULL;
 	else
 	{
-		tmp_par->outfile = malloc(sizeof(char*) * outfile + 1);
-		tmp_par->outfile[outfile + 1] = NULL;	
+		new_tab = malloc(sizeof(char*) * (count + 1));
+		new_tab[count] = NULL;
 	}
-	if (append == 0)
-		tmp_par->append = ft_calloc(1, sizeof(char*));
-	else
-	{
-		tmp_par->append = malloc(sizeof(char*) * append + 1);
-		tmp_par->append[append + 1] = NULL;	
-	}
-	printf("outfile = %d\n", outfile);
-	printf("append = %d\n", append);
-}
-
-int	nb_tab(char	**par_tab)
-{
-	int	i;
-
-	i = 0;
-	while (par_tab[i] != NULL)
-		i++;
-	printf("i = %d\n", i);
-	return (i);
+	return (new_tab);
 }
 
 int	parsize(t_par *parser)

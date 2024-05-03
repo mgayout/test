@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:55:09 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/02 17:28:07 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 16:09:40 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,13 @@ void	parser(t_data *data)
 	t_par	*par_tmp;
 	t_lex	*lex_tmp;
 	
-	data->parser = new_par();
+	data->parser = new_par(data->lexer);
 	par_tmp = data->parser;
 	lex_tmp = data->lexer;
-	init_tab_in(par_tmp, lex_tmp);
-	init_tab_out(par_tmp, lex_tmp);
 	while (lex_tmp != NULL)
 	{
 		if (addlex_topar(par_tmp, lex_tmp))
-		{
-			lex_tmp = lex_tmp->next;
 			par_tmp = par_tmp->next;
-			init_tab_in(par_tmp, lex_tmp);
-			init_tab_out(par_tmp, lex_tmp);
-		}
 		else
 			lex_tmp = lex_tmp->next;
 	}
@@ -44,7 +37,7 @@ int	addlex_topar(t_par *parser, t_lex *lexer)
 		x_elem(parser, lexer);
 	else
 	{
-		last_elem(parser);
+		last_elem(parser, lexer);
 		return (1);
 	}
 	return (0);
@@ -85,11 +78,11 @@ void	x_elem(t_par *parser, t_lex *lexer)
 		add_redir_par(parser, lexer);
 }
 
-void	last_elem(t_par *parser)
+void	last_elem(t_par *parser, t_lex *lexer)
 {
 	t_par	*new;
 
-	new = new_par();
+	new = new_par(lexer->next);
 	parser->pipeout = true;
 	parser->data = join_data_par(parser->data, "|");
 	new->pipein = true;

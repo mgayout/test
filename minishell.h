@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/02 17:36:19 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 15:30:36 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,13 @@ typedef struct s_par
 	int				builtin;
 	char			*arg;
 	char			**infile;
+	int				infile_count;
 	char			**outfile;
+	int				outfile_count;
 	bool			pipein;
 	bool			pipeout;
 	char			**heredoc;
+	int				heredoc_count;
 	char			**append;
 	struct s_par	*next;
 	struct s_par	*prev;
@@ -103,7 +106,6 @@ typedef struct s_exe
 	int				pipefd[2];
 	int				std_in;
 	int				std_out;
-	bool			heredoc;
 	int				*pid;
 	int				nb_cmd;
 	int				status;

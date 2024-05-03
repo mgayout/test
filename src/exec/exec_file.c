@@ -1,17 +1,66 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_pipe.c                                        :+:      :+:    :+:   */
+/*   exec_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:53:27 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/25 17:34:10 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 16:43:30 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
+void	open_file_cmd(t_data *data)
+{
+	t_pid	pid;
+
+	pid = data->exec->child[0];
+	if (pid.lst->infile_count == 1 && pid.lst->heredoc_count == 0)
+	{
+		printf("1\n");
+		pid.infile = open(pid.lst->infile[0], O_RDONLY);
+	}
+	else if (pid.lst->heredoc_count == 1 && pid.lst->infile_count == 0)
+	{
+		printf("2\n");
+		pid.infile = init_heredoc(data);
+	}
+	else if (pid.lst->infile_count + pid.lst->heredoc_count > 1)
+	{
+		printf("3\n");
+		pid.infile = open_infiles_cmd(data);
+	}
+	else
+	{
+		printf("4\n");
+		pid.infile = data->exec->std_in;	
+	}
+	if (pid.lst->outfile_count > 0)
+	{
+		if (pid.lst->outfile_count == 1 && !ft_strncmp(pid.lst->append[0], "false", ft_strlen("false")))
+		{
+			printf("1\n");
+			pid.outfile = open(pid.lst->outfile[0], O_RDWR | O_TRUNC | O_CREAT, 0640);
+		}
+		else if (!ft_strncmp(pid.lst->append[0], "true", ft_strlen("true")) && pid.lst->outfile_count == 1)
+		{
+			printf("2\n");
+			pid.outfile = open(pid.lst->outfile[0], O_WRONLY | O_CREAT | O_APPEND, 0640);
+		}
+		else if (pid.lst->outfile_count > 1)
+		{
+			printf("3\n");
+			pid.outfile = open_outfiles_cmd(data);
+		}
+	}
+	else
+		pid.outfile = data->exec->std_out;
+	dup2(pid.infile, STDIN_FILENO);
+	dup2(pid.outfile, STDOUT_FILENO);
+}
+/*
 void	open_pipe(t_data *data)
 {
 	int	i;
@@ -83,9 +132,9 @@ void	open_outfile(t_data *data)
 		dup2(data->exec->pipefd[1], STDOUT_FILENO);
 	else
 		close(data->exec->pipefd[1]);
-}
+}*/
 
-void	open_files(t_data *data)
+/*void	open_files(t_data *data)
 {
 	t_pid	pid;
 
@@ -111,4 +160,4 @@ void	open_files(t_data *data)
 					| O_TRUNC | O_CREAT, 0640);
 		dup2(pid.outfile, STDOUT_FILENO);
 	}
-}
+}*/

@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:55:30 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/02 17:31:44 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/03 13:55:39 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	parser(t_data *data);
 int		addlex_topar(t_par *parser, t_lex *lexer);
 void	first_elem(t_par *parser, t_lex *lexer);
 void	x_elem(t_par *parser, t_lex *lexer);
-void	last_elem(t_par *parser);
+void	last_elem(t_par *parser, t_lex *lexer);
 
 //PARSER_UTILS
 
@@ -33,10 +33,9 @@ void	print_par(t_data *data);
 
 //PARSER_FUNCTION
 
-t_par	*new_par(void);
-void	init_tab_in(t_par *parser, t_lex *lexer);
-void	init_tab_out(t_par *parser, t_lex *lexer);
-int		nb_tab(char	**par_tab);
+t_par	*new_par(t_lex *lexer);
+char	**init_tab(t_lex *lexer, t_lex_redir n);
+char	**init_tab2(t_lex *lexer, t_lex_redir n, t_lex_redir o);
 int		parsize(t_par *parser);
 
 #endif
