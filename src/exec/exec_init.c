@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/03 16:17:07 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/07 12:11:07 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,25 @@ t_exe	*init_exe(t_par *parser)
 	return (exec);
 }
 
-/*void	init_child(t_data *data)
+void	init_child(t_data *data)
 {
 	t_par	*tmp;
 	int		i;
 
 	tmp = data->parser;
 	i = data->exec->status;
+	data->exec->child[i].infile = 0;
+	data->exec->child[i].outfile = 0;
 	while (tmp != NULL)
 	{
 		if (i == (tmp->id - 1))
 		{
 			data->exec->child[i].lst = tmp;
-			if (tmp->heredoc)
-				data->exec->heredoc = true;
 			return ;
 		}
 		tmp = tmp->next;
 	}
-}*/
+}
 
 int	init_heredoc(t_data *data)
 {

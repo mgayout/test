@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:55:30 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/03 13:55:39 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/07 11:59:19 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ void	print_par(t_data *data);
 //PARSER_FUNCTION
 
 t_par	*new_par(t_lex *lexer);
-char	**init_tab(t_lex *lexer, t_lex_redir n);
-char	**init_tab2(t_lex *lexer, t_lex_redir n, t_lex_redir o);
+char	**init_tab(t_lex *lexer, t_lex_redir n, t_lex_redir o);
 int		parsize(t_par *parser);
 
 #endif

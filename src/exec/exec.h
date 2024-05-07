@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:54:23 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/03 16:41:00 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/07 14:51:17 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,23 @@ void	exec_pipeline(t_data *data);
 //EXEC_INIT
 
 t_exe	*init_exe(t_par *parser);
-//void	init_child(t_data *data);
+void	init_child(t_data *data);
 int		init_heredoc(t_data *data);
 
-//EXEC_FILE
+//EXEC_FILE_CMD
 
 void	open_file_cmd(t_data *data);
-/*void	open_pipe(t_data *data);
-void	open_infile(t_data *data);
-void	open_outfile(t_data *data);
-void	open_files(t_data *data);
-*/
+void	infile_cmd(t_data *data);
+void	infiles_cmd(t_data *data);
+void	outfile_cmd(t_data *data);
+void	outfiles_cmd(t_data *data);
+
+//EXEC_FILE_PIPELINE
+
+void	open_file_pipeline(t_data *data);
+void	infile_pipeline(t_data *data);
+void	outfile_pipeline(t_data *data);
+
 //EXEC_FILES
 
 int		open_infiles_cmd(t_data *data);

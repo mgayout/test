@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/05/03 16:12:06 by mgayout          ###   ########.fr        #
+#    Updated: 2024/05/07 14:13:43 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,8 @@ SRC_EXP =	expander \
 
 SRC_EXE =	exec \
 			exec_init \
-			exec_file \
+			exec_file_cmd \
+			exec_file_pipeline \
 			exec_files \
 			exec_cmd \
 

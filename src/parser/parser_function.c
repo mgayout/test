@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 14:26:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/03 16:10:14 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/07 11:59:14 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,12 @@ t_par	*new_par(t_lex *lexer)
 	new->cmd = NULL;
 	new->builtin = 0;
 	new->arg = NULL;
-	new->infile = init_tab(lexer, INFILE);
+	new->infile = init_tab(lexer, INFILE, HEREDOC);
 	new->infile_count = 0;
-	new->heredoc = init_tab(lexer, HEREDOC);
-	new->heredoc_count = 0;
-	new->outfile = init_tab2(lexer, OUTFILE, APPEND);
+	new->heredoc = init_tab(lexer, HEREDOC, INFILE);
+	new->outfile = init_tab(lexer, OUTFILE, APPEND);
 	new->outfile_count = 0;
-	new->append = init_tab2(lexer, APPEND, OUTFILE);
+	new->append = init_tab(lexer, APPEND, OUTFILE);
 	new->pipein = false;
 	new->pipeout = false;
 	new->next = NULL;
@@ -39,33 +38,7 @@ t_par	*new_par(t_lex *lexer)
 	return (new);
 }
 
-char	**init_tab(t_lex *lexer, t_lex_redir n)
-{
-	t_lex	*tmp_lex;
-	char	**new_tab;
-	int		count;
-	
-	count = 0;
-	tmp_lex = lexer;
-	while(tmp_lex != NULL)
-	{
-		if (tmp_lex->redir == n)
-			count++;
-		else if (tmp_lex->type == PIPE)
-			break;
-		tmp_lex = tmp_lex->next;
-	}
-	if (count == 0)
-		new_tab = NULL;
-	else
-	{
-		new_tab = malloc(sizeof(char*) * (count + 1));
-		new_tab[count] = NULL;
-	}
-	return (new_tab);
-}
-
-char	**init_tab2(t_lex *lexer, t_lex_redir n, t_lex_redir o)
+char	**init_tab(t_lex *lexer, t_lex_redir n, t_lex_redir o)
 {
 	t_lex	*tmp_lex;
 	char	**new_tab;

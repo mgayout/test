@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:15:45 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/03 16:10:00 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/07 11:58:02 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,14 @@ void	add_string_par(t_par *parser, t_lex *lexer)
 {
 	if (lexer->prev->type == REDIR)
 	{
-		if (lexer->prev->redir == INFILE)
+		if (lexer->prev->redir == INFILE || lexer->prev->redir == HEREDOC)
 		{
 			parser->infile[parser->infile_count] = ft_strdup(lexer->data);
+			if (lexer->prev->redir == INFILE)
+				parser->heredoc[parser->infile_count] = ft_strdup("false");
+			else
+				parser->heredoc[parser->infile_count] = ft_strdup("true");
 			parser->infile_count++;	
-		}
-		else if (lexer->prev->redir == HEREDOC)
-		{
-			parser->heredoc[parser->heredoc_count] = ft_strdup(lexer->data);
-			parser->heredoc_count++;
 		}
 		else
 		{
