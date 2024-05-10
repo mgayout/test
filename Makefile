@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/05/07 14:13:43 by mgayout          ###   ########.fr        #
+#    Updated: 2024/05/10 18:23:58 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ SRC_EXE =	exec \
 			exec_init \
 			exec_file_cmd \
 			exec_file_pipeline \
-			exec_files \
+			exec_utils \
 			exec_cmd \
 
 SRC_BUI =	builtins echo cd pwd export unset env exit \

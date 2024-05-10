@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/07 11:58:19 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/10 16:47:41 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,14 @@ typedef struct s_exe
 	int				*pid;
 	int				nb_cmd;
 	int				status;
+	int				out;
 	struct s_pid	*child;
 }					t_exe;
 
 typedef struct s_pid
 {
 	struct s_par	*lst;
+	int				*pid;
 	char			*arg1;
 	char			**arg2;
 	int				infile;

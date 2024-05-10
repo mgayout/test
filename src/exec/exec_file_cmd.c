@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:53:27 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/07 16:53:54 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/10 17:55:21 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@ void	open_file_cmd(t_data *data)
 
 	child = data->exec->child[data->exec->status];
 	if (child.lst->infile_count <= 1)
-		infile_cmd(data);
+		child.infile = infile_cmd(data);
 	else
-		infiles_cmd(data);
+		child.infile = infiles_cmd(data);
 	if (child.lst->outfile_count <= 1)
-		outfile_cmd(data);
+		child.outfile = outfile_cmd(data);
 	else
-		outfiles_cmd(data);
+		child.outfile = outfiles_cmd(data);
+	dup2(child.infile, STDIN_FILENO);
+	dup2(child.outfile, STDOUT_FILENO);
 }
 
-void	infile_cmd(t_data *data)
+int	infile_cmd(t_data *data)
 {
 	t_pid	child;
 
@@ -35,13 +37,13 @@ void	infile_cmd(t_data *data)
 	if (child.lst->infile_count == 1 && !ft_strncmp(child.lst->heredoc[0], "false", ft_strlen("false")))
 		child.infile = open(child.lst->infile[0], O_RDONLY);
 	else if (child.lst->infile_count == 1 && !ft_strncmp(child.lst->heredoc[0], "true", ft_strlen("true")))
-		child.infile = init_heredoc(data);
+		child.infile = init_heredoc(data, child.lst->infile[0]);
 	else
 		child.infile = data->exec->std_in;
-	dup2(child.infile, STDIN_FILENO);
+	return(child.infile);
 }
 
-void	infiles_cmd(t_data *data)
+int	infiles_cmd(t_data *data)
 {
 	t_pid	child;
 	int		infile;
@@ -59,11 +61,10 @@ void	infiles_cmd(t_data *data)
 		infile++;
 	}
 	close(file);
-	child.infile = open(".temp", O_RDONLY);
-	dup2(child.infile, STDIN_FILENO);
+	return(open(".temp", O_RDONLY));
 }
 
-void	outfile_cmd(t_data *data)
+int	outfile_cmd(t_data *data)
 {
 	t_pid	child;
 	
@@ -74,37 +75,27 @@ void	outfile_cmd(t_data *data)
 		child.outfile = open(child.lst->outfile[0], O_WRONLY | O_CREAT | O_APPEND, 0640);
 	else
 		child.outfile = data->exec->std_out;
-	dup2(child.outfile, STDOUT_FILENO);
+	return (child.outfile);
 }
 
-void	outfiles_cmd(t_data *data) //a modifie !
+int	outfiles_cmd(t_data *data)
 {
-	/*t_pid	child;
-	int		*pid;
+	t_pid	child;
 	int		outfile;
 	
 	child = data->exec->child[data->exec->status];
-	pid = malloc(sizeof(int) * (child.lst->outfile_count - 1));
 	outfile = 0;
-	while (outfile != (child.lst->outfile_count - 1))
+	while (outfile != child.lst->outfile_count)
 	{
-		pid[outfile] = fork();
-		if (!pid[outfile])
-		{
-			if (!ft_strncmp(child.lst->append[outfile], "false", ft_strlen("false")))
-				dup2(open(child.lst->outfile[outfile], O_RDWR | O_TRUNC | O_CREAT, 0640), STDOUT_FILENO);
-			else
-				dup2(open(child.lst->outfile[outfile], O_WRONLY | O_CREAT | O_APPEND, 0640), STDOUT_FILENO);
-			break ;
-		}
+		if (outfile != child.lst->outfile_count - 1)
+			child.pid[outfile] = fork();
+		if (!ft_strncmp(child.lst->append[outfile], "false", ft_strlen("false")))
+			child.outfile = open(child.lst->outfile[outfile], O_RDWR | O_TRUNC | O_CREAT, 0640);
+		else if (!ft_strncmp(child.lst->append[outfile], "true", ft_strlen("true")))
+			child.outfile = open(child.lst->outfile[outfile], O_WRONLY | O_CREAT | O_APPEND, 0640);
+		if (!child.pid[outfile])
+			break;
 		outfile++;
 	}
-	if (!data->exec->pid[data->exec->status])
-	{
-		if (!ft_strncmp(child.lst->append[outfile], "false", ft_strlen("false")))
-			dup2(open(child.lst->outfile[outfile], O_RDWR | O_TRUNC | O_CREAT, 0640), STDOUT_FILENO);
-		else
-			dup2(open(child.lst->outfile[outfile], O_WRONLY | O_CREAT | O_APPEND, 0640), STDOUT_FILENO);
-		waitpid(pid[outfile - 1], NULL, 0);
-	}*/
+	return (child.outfile);
 }

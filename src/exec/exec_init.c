@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/07 12:11:07 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/10 18:37:12 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_exe	*init_exe(t_par *parser)
 	if (!exec)
 		return (NULL);
 	exec->status = 0;
+	exec->out = 0;
 	exec->nb_cmd = parsize(parser);
 	exec->std_in = dup(0);
 	exec->std_out = dup(1);
@@ -29,46 +30,31 @@ t_exe	*init_exe(t_par *parser)
 	return (exec);
 }
 
-void	init_child(t_data *data)
+t_pid	init_child(t_data *data)
 {
+	t_pid	child;
 	t_par	*tmp;
 	int		i;
 
-	tmp = data->parser;
+	child.infile = 0;
+	child.outfile = 0;
 	i = data->exec->status;
-	data->exec->child[i].infile = 0;
-	data->exec->child[i].outfile = 0;
+	tmp = data->parser;
 	while (tmp != NULL)
 	{
 		if (i == (tmp->id - 1))
 		{
-			data->exec->child[i].lst = tmp;
-			return ;
+			child.lst = tmp;
+			break ;
 		}
 		tmp = tmp->next;
 	}
-}
-
-int	init_heredoc(t_data *data)
-{
-	t_pid	pid;
-	char	*buf;
-	int		file;
-
-	pid = data->exec->child[data->exec->status];
-	file = open(".temp", O_WRONLY | O_TRUNC | O_CREAT, 0777);
-	while (1)
+	if (child.lst->outfile_count >= 1)
 	{
-		write(1, "> ", 2);
-		buf = get_next_line(0);
-		if (ft_strncmp(buf, pid.lst->heredoc[0], ft_strlen(buf) - 1) == 0
-			&& ft_strlen(buf) == ft_strlen(pid.lst->heredoc[0]) + 1)
-			break ;
+		if (child.lst->pipeout)
+			child.pid = malloc(sizeof(int) * child.lst->outfile_count);
 		else
-			write(file, buf, ft_strlen(buf));
-		free(buf);
+			child.pid = malloc(sizeof(int) * child.lst->outfile_count - 1);
 	}
-	free(buf);
-	close(file);
-	return (open(".temp", O_RDONLY));
+	return (child);
 }
