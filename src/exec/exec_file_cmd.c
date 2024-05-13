@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:53:27 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/10 17:55:21 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/13 13:21:50 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	open_file_cmd(t_data *data)
 
 int	infile_cmd(t_data *data)
 {
+	printf("infile\n");
 	t_pid	child;
 
 	child = data->exec->child[data->exec->status];
@@ -45,13 +46,15 @@ int	infile_cmd(t_data *data)
 
 int	infiles_cmd(t_data *data)
 {
+	printf("infiles\n");
 	t_pid	child;
 	int		infile;
 	int		file;
 
 	child = data->exec->child[data->exec->status];
 	infile = 0;
-	file = open(".temp", O_WRONLY | O_APPEND | O_CREAT, 0777);
+	file = open(".temp", O_WRONLY | O_TRUNC | O_CREAT, 0777);
+	close(file);
 	while (infile != child.lst->infile_count)
 	{
 		if (!ft_strncmp(child.lst->heredoc[infile], "false", ft_strlen("false")))
@@ -60,12 +63,12 @@ int	infiles_cmd(t_data *data)
 			write_heredoc_temp(data, infile, file);
 		infile++;
 	}
-	close(file);
 	return(open(".temp", O_RDONLY));
 }
 
 int	outfile_cmd(t_data *data)
 {
+	printf("outfile\n");
 	t_pid	child;
 	
 	child = data->exec->child[data->exec->status];
@@ -80,6 +83,7 @@ int	outfile_cmd(t_data *data)
 
 int	outfiles_cmd(t_data *data)
 {
+	printf("outfiles\n");
 	t_pid	child;
 	int		outfile;
 	

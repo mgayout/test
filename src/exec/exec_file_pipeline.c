@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:13:00 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/10 18:38:13 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/13 12:44:07 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void	open_file_pipeline(t_data *data)
 			infiles_pipeline(data);
 		else
 			infile_pipeline(data);
-		//if (child.lst->outfile_count > 1)
-			//outfiles_pipeline(data);
-		//else
-		outfile_pipeline(data);
+		if (child.lst->outfile_count > 1)
+			outfiles_pipeline(data);
+		else
+			outfile_pipeline(data);
 	}
 	else
 		if (child.lst->pipeout)
@@ -103,12 +103,12 @@ void	outfile_pipeline(t_data *data)
 		close(data->exec->pipefd[1]);
 }
 
-/*void	outfiles_pipeline(t_data *data)// a finir
+void	outfiles_pipeline(t_data *data)// a finir
 {
-	//t_pid	pid;
+	t_pid	child;
 	int		outfile;
-
-	//pid = data->exec->child[data->exec->status];
+	
+	child = data->exec->child[data->exec->status];
 	outfile = 0;
 	while (outfile != child.lst->outfile_count)
 	{
@@ -122,4 +122,4 @@ void	outfile_pipeline(t_data *data)
 			break;
 		outfile++;
 	}
-}*/
+}

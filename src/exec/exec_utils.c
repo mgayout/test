@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:35:31 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/10 18:23:48 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/13 13:02:32 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	write_infile_temp(t_data *data, int count, int temp)
 	int		file;
 	
 	file = open(data->parser->infile[count], O_RDONLY);
+	temp = open(".temp", O_WRONLY | O_APPEND | O_CREAT, 0777);
 	while (1)
 	{
 		buf = get_next_line(file);
@@ -50,6 +51,7 @@ void	write_infile_temp(t_data *data, int count, int temp)
 		free(buf);
 	}
 	close(file);
+	close(temp);
 }
 
 void	write_heredoc_temp(t_data *data, int count, int temp)
@@ -58,6 +60,7 @@ void	write_heredoc_temp(t_data *data, int count, int temp)
 	char	*buf;
 
 	child = data->exec->child[data->exec->status];
+	temp = open(".temp", O_WRONLY | O_APPEND | O_CREAT, 0777);
 	while (1)
 	{
 		write(data->exec->std_out, "> ", 2);
@@ -70,6 +73,7 @@ void	write_heredoc_temp(t_data *data, int count, int temp)
 		free(buf);
 	}
 	free(buf);
+	close(temp);
 }
 
 void	write_pipe_temp(int pipe, int temp)
