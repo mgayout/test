@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 16:29:25 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/13 13:19:07 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:48:45 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,50 @@ void	exec_cmd_file(t_data *data)
 
 	data->exec->child[data->exec->status] = init_child(data);
 	child = data->exec->child[data->exec->status];
-	data->exec->pid[0] = fork();
-	if (!data->exec->pid[0])
+	if (child.nb_out > 1)
+		exec_cmd_files(data);
+	else
 	{
-		open_file_cmd(data);
-		if (child.lst->builtin > 0)
-			exec_builtins(data);
-		else
-			children(data);
+		data->exec->pid = malloc(sizeof(int) * data->exec->nb_cmd);
+		data->exec->pid[0] = fork();
+		if (!data->exec->pid[0])
+		{
+			open_file_cmd(data);
+			if (child.lst->builtin > 0)
+				exec_builtins(data);
+			else
+				children(data);
+		}
+		waitpid(data->exec->pid[0], NULL, 0);
 	}
-	waitpid(data->exec->pid[0], NULL, 0);
 	if (child.lst->infile_count > 1)
 		unlink(".temp");
+}
+
+void	exec_cmd_files(t_data *data)
+{
+	t_pid	child;
+	int out;
+
+	child = data->exec->child[data->exec->status];
+	out = 0;
+	data->exec->pid = malloc(sizeof(int) * child.nb_out);
+	create_all_files(data);
+	while (out != child.nb_out)
+	{
+		data->exec->pid[out] = fork();
+		if (!data->exec->pid[out])
+		{
+			open_file_cmd(data);
+			if (child.lst->builtin > 0)
+				exec_builtins(data);
+			else
+				children(data);
+		}
+		waitpid(data->exec->pid[out], NULL, 0);
+		out++;
+		child.lst = child.lst->next;
+	}
 }
 
 void	exec_pipeline(t_data *data)
@@ -69,3 +101,8 @@ void	exec_pipeline(t_data *data)
 		&& child.lst->pipein))
 		unlink(".temp");
 }
+
+/*void	exec_pipelines(t_data *data)
+{
+	
+}*/

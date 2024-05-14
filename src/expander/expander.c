@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:24:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/13 14:07:21 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 16:18:27 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,20 @@
 
 void	expander(t_data *data)
 {
-	t_par	*tmp;
+	t_par	*parser;
 
-	tmp = data->parser;
-	while (tmp != NULL)
+	data->expander = (t_exp *)ft_calloc(1, sizeof(t_exp));
+	data->expander = NULL;
+	parser = data->parser;
+	while (parser != NULL)
 	{
-		if (ft_strchr(tmp->data, '$'))
-			dollar_parser(data, tmp);
-		tmp = tmp->next;
-	}
-	tmp = data->parser;
-	while(tmp != NULL)
-	{
-		if (tmp->pipeout && tmp->outfile_count >= 1)
-			tmp = multi_cmd_pipe(data, tmp);
-		else if (tmp->outfile_count > 1)
-			tmp = multi_cmd_nopipe(data, tmp);
-		tmp = tmp->next;
+		if (ft_strchr(parser->data, '$'))
+			dollar_parser(data, parser);
+		if ((parser->outfile_count == 1 && parser->pipeout) || parser->outfile_count > 1)
+			add_exps(&data->expander, parser);
+		else
+			add_exp(&data->expander, parser);
+		parser = parser->next;
 	}
 }
 
@@ -58,26 +55,4 @@ void	dollar_parser(t_data *data, t_par *parser)
 				parser->outfile[i] = env_var(data, parser->outfile[i]);
 			i++;
 		}
-}
-
-t_par	*multi_cmd_nopipe(t_data *data, t_par *parser)
-{
-	t_par	*new;
-	t_par	*prev;
-	int	outfile;
-
-	outfile = 0;
-	new = parser;
-	parser->prev->next = new;
-	while (outfile != parser->outfile_count)
-	{
-		outfile++;
-	}
-	new->next
-	return(new);
-}
-
-t_par	*multi_cmd_pipe(t_data *data, t_par *parser)
-{
-	
 }

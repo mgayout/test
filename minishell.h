@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/10 16:47:41 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:40:09 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,25 @@ typedef struct s_par
 	struct s_par	*prev;
 }					t_par;
 
+typedef struct s_exp
+{
+	int				id;
+	char			*data;
+	char			*cmd;
+	int				builtin;
+	char			*arg;
+	char			**infile;
+	int				infile_count;
+	char			**outfile;
+	int				outfile_count;
+	bool			pipein;
+	bool			pipeout;
+	char			**heredoc;
+	char			**append;
+	struct s_exp	*next;
+	struct s_exp	*prev;
+}					t_exp;
+
 typedef struct s_exe
 {
 	int				pipefd[2];
@@ -108,18 +127,17 @@ typedef struct s_exe
 	int				*pid;
 	int				nb_cmd;
 	int				status;
-	int				out;
 	struct s_pid	*child;
 }					t_exe;
 
 typedef struct s_pid
 {
-	struct s_par	*lst;
-	int				*pid;
+	struct s_exp	*lst;
 	char			*arg1;
 	char			**arg2;
 	int				infile;
 	int				outfile;
+	int				nb_out;
 }					t_pid;
 
 typedef struct s_data
@@ -127,8 +145,10 @@ typedef struct s_data
 	char			**envp;
 	struct s_env	*env;
 	char			*prompt;
+	char			*last_prompt;
 	struct s_lex	*lexer;
 	struct s_par	*parser;
+	struct s_exp	*expander;
 	struct s_exe	*exec;
 }					t_data;
 
@@ -157,6 +177,7 @@ void	free_all(t_data *data);
 void	free_env(t_env **env);
 void	free_lex(t_lex **lexer);
 void	free_par(t_par **parser);
+void	free_exp(t_exp **expander);
 void	free_exe(t_exe **exec);
 void	free_tab(char **tabs);
 

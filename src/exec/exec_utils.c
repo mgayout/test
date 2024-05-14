@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:35:31 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/13 13:02:32 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:55:09 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,24 @@ void	write_pipe_temp(int pipe, int temp)
 		else
 			write(temp, buf, ft_strlen(buf));
 		free(buf);
+	}
+}
+
+void	create_all_files(t_data *data)
+{
+	t_exp	*lst;
+	t_pid	child;
+	int		out;
+	int		file;
+
+	child = data->exec->child[data->exec->status];
+	lst = child.lst;
+	out = 0;
+	while (out != child.nb_out)
+	{
+		file = open(lst->outfile[0], O_CREAT, 0777);
+		close(file);
+		lst = lst->next;
+		out++;
 	}
 }

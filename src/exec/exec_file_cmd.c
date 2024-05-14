@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:53:27 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/13 13:21:50 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:32:27 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,13 @@ void	open_file_cmd(t_data *data)
 		child.infile = infile_cmd(data);
 	else
 		child.infile = infiles_cmd(data);
-	if (child.lst->outfile_count <= 1)
-		child.outfile = outfile_cmd(data);
-	else
-		child.outfile = outfiles_cmd(data);
+	child.outfile = outfile_cmd(data);
 	dup2(child.infile, STDIN_FILENO);
 	dup2(child.outfile, STDOUT_FILENO);
 }
 
 int	infile_cmd(t_data *data)
 {
-	printf("infile\n");
 	t_pid	child;
 
 	child = data->exec->child[data->exec->status];
@@ -46,7 +42,6 @@ int	infile_cmd(t_data *data)
 
 int	infiles_cmd(t_data *data)
 {
-	printf("infiles\n");
 	t_pid	child;
 	int		infile;
 	int		file;
@@ -68,7 +63,6 @@ int	infiles_cmd(t_data *data)
 
 int	outfile_cmd(t_data *data)
 {
-	printf("outfile\n");
 	t_pid	child;
 	
 	child = data->exec->child[data->exec->status];
@@ -78,28 +72,5 @@ int	outfile_cmd(t_data *data)
 		child.outfile = open(child.lst->outfile[0], O_WRONLY | O_CREAT | O_APPEND, 0640);
 	else
 		child.outfile = data->exec->std_out;
-	return (child.outfile);
-}
-
-int	outfiles_cmd(t_data *data)
-{
-	printf("outfiles\n");
-	t_pid	child;
-	int		outfile;
-	
-	child = data->exec->child[data->exec->status];
-	outfile = 0;
-	while (outfile != child.lst->outfile_count)
-	{
-		if (outfile != child.lst->outfile_count - 1)
-			child.pid[outfile] = fork();
-		if (!ft_strncmp(child.lst->append[outfile], "false", ft_strlen("false")))
-			child.outfile = open(child.lst->outfile[outfile], O_RDWR | O_TRUNC | O_CREAT, 0640);
-		else if (!ft_strncmp(child.lst->append[outfile], "true", ft_strlen("true")))
-			child.outfile = open(child.lst->outfile[outfile], O_WRONLY | O_CREAT | O_APPEND, 0640);
-		if (!child.pid[outfile])
-			break;
-		outfile++;
-	}
 	return (child.outfile);
 }

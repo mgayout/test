@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:24:03 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/13 14:03:50 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 16:17:02 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@
 
 void	expander(t_data *data);
 void	dollar_parser(t_data *data, t_par *parser);
-t_par	*multi_cmd_nopipe(t_data *data, t_par *parser);
-t_par	*multi_cmd_pipe(t_data *data, t_par *parser);
+
+//EXPANDER_INIT
+
+void	add_exp(t_exp **expander, t_par *parser);
+void	add_exps(t_exp **expander, t_par *parser);
+void	add_exp_outfile(t_exp **expander, t_par *parser, int i);
+void	add_exp_pipeout(t_exp **expander, t_par *parser);
 
 //EXPANDER_ENV
 
@@ -34,5 +39,13 @@ char	*replace_str(char	*str, char	**value, int i, int j);
 char	*search_begin(char *str, int i);
 char	*search_end(char *str, int i);
 int		count_dollar(char *str);
+char	**copy_tab(char **old);
+void	print_exp(t_data *data);
+
+//EXPANDER_FUNCTION
+
+void	add_back_exp(t_exp **expander, t_exp *new);
+t_exp	*explast(t_exp *lst);
+int		expsize(t_exp *lst);
 
 #endif

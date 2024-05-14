@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:13:00 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/13 12:44:07 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:41:07 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void	open_file_pipeline(t_data *data)
 			infiles_pipeline(data);
 		else
 			infile_pipeline(data);
-		if (child.lst->outfile_count > 1)
-			outfiles_pipeline(data);
-		else
-			outfile_pipeline(data);
+		outfile_pipeline(data);
 	}
 	else
 		if (child.lst->pipeout)
@@ -101,25 +98,4 @@ void	outfile_pipeline(t_data *data)
 		dup2(data->exec->pipefd[1], STDOUT_FILENO);
 	else
 		close(data->exec->pipefd[1]);
-}
-
-void	outfiles_pipeline(t_data *data)// a finir
-{
-	t_pid	child;
-	int		outfile;
-	
-	child = data->exec->child[data->exec->status];
-	outfile = 0;
-	while (outfile != child.lst->outfile_count)
-	{
-		if (outfile != child.lst->outfile_count - 1)
-			child.pid[outfile] = fork();
-		if (!ft_strncmp(child.lst->append[outfile], "false", ft_strlen("false")))
-			child.outfile = open(child.lst->outfile[outfile], O_RDWR | O_TRUNC | O_CREAT, 0640);
-		else if (!ft_strncmp(child.lst->append[outfile], "true", ft_strlen("true")))
-			child.outfile = open(child.lst->outfile[outfile], O_WRONLY | O_CREAT | O_APPEND, 0640);
-		if (!child.pid[outfile])
-			break;
-		outfile++;
-	}
 }

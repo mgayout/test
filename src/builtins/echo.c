@@ -6,13 +6,13 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:45:51 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 14:34:47 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:37:07 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	echo_builtin(t_par *lst)
+void	echo_builtin(t_exp *lst)
 {
 	printf("%s\n", lst->arg);
 }

@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:29:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/13 13:38:35 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/14 14:52:09 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,79 @@ int	count_dollar(char *str)
 		i++;
 	}
 	return (dollar);
+}
+
+char	**copy_tab(char **old)
+{
+	char	**new;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (!old)
+		return (NULL);
+	while (old[i] != NULL)
+		i++;
+	new = malloc(sizeof(char *) * i);
+	while (j < i)
+	{
+		new[j] = ft_strdup(old[j]);
+		j++;
+	}
+	new[j] = NULL;
+	return (new);
+}
+
+void	print_exp(t_data *data)
+{
+	t_exp	*tmp;
+	int		i;
+
+	tmp = data->expander;
+	while (tmp != NULL)
+	{
+		printf("id = %d\n", tmp->id);
+		printf("data = %s\n", tmp->data);
+		printf("cmd = %s\n", tmp->cmd);
+		printf("arg = %s\n", tmp->arg);
+		printf("builtin = %d\n", tmp->builtin);
+		if (tmp->infile)
+		{
+			i = 0;
+			while (tmp->infile[i] != NULL)
+			{
+				printf("infile n*%d = %s\n", i + 1, tmp->infile[i]);
+				i++;
+			}
+		}
+		if (tmp->pipein)
+			printf("pipein true\n");
+		if (tmp->heredoc)
+		{
+			i = 0;
+			while (tmp->heredoc[i] != NULL)
+			{
+				printf("heredoc limiter n*%d = %s\n", i + 1, tmp->heredoc[i]);
+				i++;
+			}
+		}
+		if (tmp->outfile)
+		{
+			i = 0;
+			while (tmp->outfile[i] != NULL)
+			{
+				printf("outfile n*%d = %s\n", i + 1, tmp->outfile[i]);
+				if (!ft_strncmp(tmp->append[i], "true", ft_strlen("true")))
+					printf("append mode = true\n");
+				else
+					printf("append mode = false\n");
+				i++;
+			}
+		}
+		if (tmp->pipeout)
+			printf("pipeout true\n");
+		printf("\n");
+		tmp = tmp->next;
+	}
 }
