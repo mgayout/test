@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/14 17:34:42 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:43:09 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,28 @@
 #include "exec/exec.h"
 #include "expander/expander.h"
 
+int	is_a_prompt(char *str)
+{
+	int	i;
+	
+	if (!str || !ft_strlen(str))
+		return (0);
+	i = 0;
+	while (str[i])
+	{
+		if ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+			i++;
+		else
+			return (1);
+	}
+	add_history(str);
+	return (0);
+}
+
 void	minishell_loop(t_data *data)
 {
 	data->prompt = readline("minishell :");
-	if (ft_strlen(data->prompt))
+	if (is_a_prompt(data->prompt))
 	{
 		if (!data->last_prompt || ft_strncmp(data->prompt, data->last_prompt, ft_strlen(data->prompt)))
 			add_history(data->prompt);
@@ -28,14 +46,12 @@ void	minishell_loop(t_data *data)
 		if (check_lexer(data->lexer))
 		{
 			parser(data);
-			//printf("parser\n\n");
 			//print_par(data);
 			if (check_parser(data->parser))
 			{
-				expander(data);
-				//printf("expander\n\n");
-				print_exp(data);
-				exec(data);
+				//expander(data);
+				//print_exp(data);
+				//exec(data);
 			}
 		}
 		data->last_prompt = ft_strdup(data->prompt);
@@ -55,5 +71,7 @@ int	main(int argc, char **argv, char *envp[])
 	//print_env(data.env);
 	if (!data.envp[0])
 		return (0);
+	data.last_prompt = NULL;
+	data.error = 0;
 	minishell_loop(&data);
 }

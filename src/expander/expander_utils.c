@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:29:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/14 14:52:09 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 12:56:48 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	**copy_tab(char **old)
 		return (NULL);
 	while (old[i] != NULL)
 		i++;
-	new = malloc(sizeof(char *) * i);
+	new = malloc(sizeof(char *) * (i + 1));
 	while (j < i)
 	{
 		new[j] = ft_strdup(old[j]);

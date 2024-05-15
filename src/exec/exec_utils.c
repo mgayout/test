@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:35:31 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/14 17:55:09 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 15:58:21 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ int	init_heredoc(t_data *data, char *stop)
 	return (open(".temp", O_RDONLY));
 }
 
-void	write_infile_temp(t_data *data, int count, int temp)
+void	write_infile_temp(t_pid child, int count, int temp)
 {
 	char	*buf;
 	int		file;
 	
-	file = open(data->parser->infile[count], O_RDONLY);
+	file = open(child.lst->infile[count], O_RDONLY);
 	temp = open(".temp", O_WRONLY | O_APPEND | O_CREAT, 0777);
 	while (1)
 	{
@@ -54,12 +54,10 @@ void	write_infile_temp(t_data *data, int count, int temp)
 	close(temp);
 }
 
-void	write_heredoc_temp(t_data *data, int count, int temp)
+void	write_heredoc_temp(t_data *data, t_pid child, int count, int temp)
 {
-	t_pid	child;
 	char	*buf;
 
-	child = data->exec->child[data->exec->status];
 	temp = open(".temp", O_WRONLY | O_APPEND | O_CREAT, 0777);
 	while (1)
 	{
@@ -91,19 +89,26 @@ void	write_pipe_temp(int pipe, int temp)
 	}
 }
 
-void	create_all_files(t_data *data)
+void	create_all_files(t_data *data, t_pid child)
 {
+	t_par	*tmp;
 	t_exp	*lst;
-	t_pid	child;
 	int		out;
+	int		i;
 	int		file;
 
-	child = data->exec->child[data->exec->status];
+	tmp = data->parser;
 	lst = child.lst;
 	out = 0;
-	while (out != child.nb_out)
+	i = 0;
+	while (lst->id != tmp->id)
+		tmp = tmp->next;
+	if (tmp->pipeout)
+		i = 1;
+	while (out != (child.nb_out - i))
 	{
-		file = open(lst->outfile[0], O_CREAT, 0777);
+		printf("out %d | nbout %d | i %d\n", out, child.nb_out, i);
+		file = open(lst->outfile[out], O_CREAT, 0777);
 		close(file);
 		lst = lst->next;
 		out++;

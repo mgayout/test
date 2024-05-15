@@ -6,29 +6,26 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:53:04 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/29 14:33:49 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 08:57:41 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	exec_builtins(t_data *data)
+void	exec_builtins(t_data *data, t_pid child)
 {
-	int	i;
-
-	i = data->exec->status;
-	if (data->exec->child[i].lst->builtin == 1)
-		echo_builtin(data->exec->child[i].lst);
-	else if (data->exec->child[i].lst->builtin == 2)
-		cd_builtin();
-	else if (data->exec->child[i].lst->builtin == 3)
-		pwd_builtin();
-	else if (data->exec->child[i].lst->builtin == 4)
-		export_builtin();
-	else if (data->exec->child[i].lst->builtin == 5)
-		unset_builtin();
-	else if (data->exec->child[i].lst->builtin == 6)
-		env_builtin();
-	else if (data->exec->child[i].lst->builtin == 7)
-		exit_builtin();
+	if (child.lst->builtin == 1)
+		echo_builtin(data, child);
+	else if (child.lst->builtin == 2)
+		cd_builtin(data, child);
+	else if (child.lst->builtin == 3)
+		pwd_builtin(data, child);
+	else if (child.lst->builtin == 4)
+		export_builtin(data, child);
+	else if (child.lst->builtin == 5)
+		unset_builtin(data, child);
+	else if (child.lst->builtin == 6)
+		env_builtin(data, child);
+	else if (child.lst->builtin == 7)
+		exit_builtin(data, child);
 }

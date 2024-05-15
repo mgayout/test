@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:24:03 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/14 16:17:02 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 14:05:17 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	add_exp_pipeout(t_exp **expander, t_par *parser);
 char	*env_var(t_data *data, char *str);
 char	*search_env_var(t_data *data, char *str, int i);
 char	*replace_str(char	*str, char	**value, int i, int j);
+char	*replace_str2(t_data *data, char *str, int i, int j);
 
 
 //EXPANDER_UTILS

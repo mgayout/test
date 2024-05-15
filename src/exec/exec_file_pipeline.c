@@ -6,25 +6,27 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:13:00 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/14 17:41:07 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:01:30 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void	open_file_pipeline(t_data *data)
+void	open_file_pipeline(t_data *data, t_pid child, int out)
 {
-	t_pid	child;
-
-	child = data->exec->child[data->exec->status];
-	if (!data->exec->pid[data->exec->status])
+	if (!data->exec->pid[out])
 	{
-		if (child.lst->infile_count > 1
-			|| (child.lst->infile_count == 1 && child.lst->pipein == true))
-			infiles_pipeline(data);
+		if (out == 0)
+		{
+			if (child.lst->infile_count > 1
+				|| (child.lst->infile_count == 1 && child.lst->pipein == true))
+				infiles_pipeline(data, child);
+			else
+				infile_pipeline(data, child);
+		}
 		else
-			infile_pipeline(data);
-		outfile_pipeline(data);
+			infile_pipeline_bool(data, child);
+		outfile_pipeline(data, child);
 	}
 	else
 		if (child.lst->pipeout)
@@ -34,11 +36,8 @@ void	open_file_pipeline(t_data *data)
 		}
 }
 
-void	infile_pipeline(t_data *data)
+void	infile_pipeline(t_data *data, t_pid child)
 {
-	t_pid	child;
-
-	child = data->exec->child[data->exec->status];
 	if (child.lst->infile_count == 1 && !ft_strncmp(child.lst->heredoc[0], "false", ft_strlen("false")))
 	{
 		child.infile = open(child.lst->infile[0], O_RDONLY);
@@ -48,6 +47,7 @@ void	infile_pipeline(t_data *data)
 	else if (child.lst->infile_count == 1 && !ft_strncmp(child.lst->heredoc[0], "true", ft_strlen("true")))
 	{
 		child.infile = init_heredoc(data, child.lst->infile[0]);
+		data->exec->temp = true;
 		dup2(child.infile, STDIN_FILENO);
 		close(data->exec->pipefd[0]);
 	}
@@ -55,13 +55,11 @@ void	infile_pipeline(t_data *data)
 		close(data->exec->pipefd[0]);
 }
 
-void	infiles_pipeline(t_data *data)
+void	infiles_pipeline(t_data *data, t_pid child)
 {
-	t_pid	child;
 	int		infile;
 	int		file;
 
-	child = data->exec->child[data->exec->status];
 	infile = 0;
 	file = open(".temp", O_WRONLY | O_TRUNC | O_CREAT, 0777);
 	if (child.lst->pipein == true)
@@ -69,32 +67,57 @@ void	infiles_pipeline(t_data *data)
 	while (infile != child.lst->infile_count)
 	{
 		if (!ft_strncmp(child.lst->heredoc[infile], "false", ft_strlen("false")))
-			write_infile_temp(data, infile, file);
+			write_infile_temp(child, infile, file);
 		else
-			write_heredoc_temp(data, infile, file);
+			write_heredoc_temp(data, child, infile, file);
 		infile++;
 	}
 	close(file);
 	child.infile = open(".temp", O_RDONLY);
 	dup2(child.infile, STDIN_FILENO);
+	data->exec->temp = true;
 }
 
-void	outfile_pipeline(t_data *data)
+void	infile_pipeline_bool(t_data *data, t_pid child)
 {
-	t_pid	pid;
+	ft_putstr_fd("hi\n", data->exec->std_out);
+	if (child.lst->infile_count == 0 && child.lst->pipein)
+	{
+		ft_putstr_fd("1\n", data->exec->std_out);
+		printf("pipe\n");
+		close(data->exec->pipefd[0]);
+	}
+	else if (child.lst->infile_count == 1
+		&& !ft_strncmp(child.lst->heredoc[0], "false", ft_strlen("false")))
+	{
+		ft_putstr_fd("2\n", data->exec->std_out);
+		printf("%s\n", child.lst->infile[0]);
+		child.infile = open(child.lst->infile[0], O_RDONLY);
+		dup2(child.infile, STDIN_FILENO);
+	}
+	else
+	{
+		ft_putstr_fd("3\n", data->exec->std_out);
+		child.infile = open(".temp", O_RDONLY);
+		dup2(child.infile, STDIN_FILENO);
+	}
+}
 
-	pid = data->exec->child[data->exec->status];
-	if (pid.lst->outfile_count == 1 && !ft_strncmp(pid.lst->append[0], "false", ft_strlen("false")))
+
+void	outfile_pipeline(t_data *data, t_pid child)
+{
+	printf("okok\n");
+	if (child.lst->outfile_count == 1 && !ft_strncmp(child.lst->append[0], "false", ft_strlen("false")))
 	{
-		pid.outfile = open(pid.lst->outfile[0], O_RDWR | O_TRUNC | O_CREAT, 0640);
-		dup2(pid.outfile, STDOUT_FILENO);
+		child.outfile = open(child.lst->outfile[0], O_RDWR | O_TRUNC | O_CREAT, 0640);
+		dup2(child.outfile, STDOUT_FILENO);
 	}
-	else if (pid.lst->outfile_count == 1 && !ft_strncmp(pid.lst->append[0], "true", ft_strlen("true")))
+	else if (child.lst->outfile_count == 1 && !ft_strncmp(child.lst->append[0], "true", ft_strlen("true")))
 	{
-		pid.outfile = open(pid.lst->outfile[0], O_WRONLY | O_CREAT | O_APPEND, 0640);
-		dup2(pid.outfile, STDOUT_FILENO);
+		child.outfile = open(child.lst->outfile[0], O_WRONLY | O_CREAT | O_APPEND, 0640);
+		dup2(child.outfile, STDOUT_FILENO);
 	}
-	else if (pid.lst->pipeout)
+	else if (child.lst->pipeout)
 		dup2(data->exec->pipefd[1], STDOUT_FILENO);
 	else
 		close(data->exec->pipefd[1]);

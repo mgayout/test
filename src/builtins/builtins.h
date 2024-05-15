@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:51:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/14 17:37:55 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 08:59:19 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,33 @@
 
 //BUILTINS
 
-void	exec_builtins(t_data *data);
+void	exec_builtins(t_data *data, t_pid child);
 
 //ECHO
 
-void	echo_builtin(t_exp *lst);
+void	echo_builtin(t_data *data, t_pid child);
 
 //CD
 
-int		cd_builtin(void);
+int		cd_builtin(t_data *data, t_pid child);
 
 //PWD
 
-int		pwd_builtin(void);
+int		pwd_builtin(t_data *data, t_pid child);
 
 //EXPORT
 
-int		export_builtin(void);
+int		export_builtin(t_data *data, t_pid child);
 
 //UNSET
 
-int		unset_builtin(void);
+int		unset_builtin(t_data *data, t_pid child);
 
 //ENV
-int		env_builtin(void);
+int		env_builtin(t_data *data, t_pid child);
 
 //EXIT
 
-int		exit_builtin(void);
+int		exit_builtin(t_data *data, t_pid child);
 
 #endif

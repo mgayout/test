@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/14 17:40:09 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:52:20 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,12 @@ typedef struct s_par
 	char			*cmd;
 	int				builtin;
 	char			*arg;
-	char			**infile;
-	int				infile_count;
-	char			**outfile;
-	int				outfile_count;
+	char			*infile;
+	char			*outfile;
 	bool			pipein;
 	bool			pipeout;
-	char			**heredoc;
-	char			**append;
+	char			*heredoc;
+	char			*append;
 	struct s_par	*next;
 	struct s_par	*prev;
 }					t_par;
@@ -126,6 +124,7 @@ typedef struct s_exe
 	int				std_out;
 	int				*pid;
 	int				nb_cmd;
+	bool			temp;
 	int				status;
 	struct s_pid	*child;
 }					t_exe;
@@ -150,10 +149,12 @@ typedef struct s_data
 	struct s_par	*parser;
 	struct s_exp	*expander;
 	struct s_exe	*exec;
+	int				error;
 }					t_data;
 
 //MAIN
 
+int		is_a_prompt(char *str);
 void	minishell_loop(t_data *data);
 
 //ENV

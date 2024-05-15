@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:15:45 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/07 11:58:02 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 17:17:20 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,33 @@ void	add_string_par(t_par *parser, t_lex *lexer)
 	{
 		if (lexer->prev->redir == INFILE || lexer->prev->redir == HEREDOC)
 		{
-			parser->infile[parser->infile_count] = ft_strdup(lexer->data);
+			if (parser->infile)
+			{
+				if (ft_strncmp(parser->heredoc, "true", ft_strlen("true")))
+					wrong_heredoc(parser);
+				else
+					open(parser->infile, O_CREAT, 0777);
+			}
 			if (lexer->prev->redir == INFILE)
-				parser->heredoc[parser->infile_count] = ft_strdup("false");
+			{
+				parser->infile = ft_strdup(lexer->data);
+				parser->heredoc = ft_strdup("false");
+			}
 			else
-				parser->heredoc[parser->infile_count] = ft_strdup("true");
-			parser->infile_count++;	
+			{
+				parser->infile = ft_strdup(lexer->data);
+				parser->heredoc = ft_strdup("true");
+			}
 		}
-		else
+		else if (lexer->prev->redir == OUTFILE || lexer->prev->redir == APPEND)
 		{
-			parser->outfile[parser->outfile_count] = ft_strdup(lexer->data);
+			if (parser->outfile)
+				open(parser->outfile, O_CREAT, 0777);
+			parser->outfile = ft_strdup(lexer->data);
 			if (lexer->prev->redir == OUTFILE)
-				parser->append[parser->outfile_count] = ft_strdup("false");
-			else
-				parser->append[parser->outfile_count] = ft_strdup("true");
-			parser->outfile_count++;
+				parser->append = ft_strdup("false");
+			else if (lexer->prev->redir == APPEND)
+				parser->append = ft_strdup("false");
 		}
 	}
 	else if (lexer->prev->type == STRING)

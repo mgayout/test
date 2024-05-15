@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:55:09 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/10 15:35:43 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:57:11 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	parser(t_data *data)
 	t_par	*par_tmp;
 	t_lex	*lex_tmp;
 	
-	data->parser = new_par(data->lexer);
+	data->parser = new_par();
 	par_tmp = data->parser;
 	lex_tmp = data->lexer;
 	while (lex_tmp != NULL)
@@ -81,7 +81,7 @@ void	last_elem(t_par *parser, t_lex *lexer)
 {
 	t_par	*new;
 
-	new = new_par(lexer->next);
+	new = new_par();
 	parser->pipeout = true;
 	parser->data = join_data_par(parser->data, "|");
 	new->data = ft_strdup("|");
