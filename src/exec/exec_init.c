@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:49:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/15 15:04:48 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/16 12:42:51 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ t_exe	*init_exe(t_par *parser)
 t_pid	init_child(t_data *data)
 {
 	t_pid	child;
-	t_exp	*tmp;
+	t_par	*tmp;
 	int		i;
 
 	child.infile = 0;
 	child.outfile = 0;
 	i = data->exec->status;
-	tmp = data->expander;
+	tmp = data->parser;
 	while (tmp != NULL)
 	{
 		if (i == (tmp->id - 1))
@@ -48,24 +48,5 @@ t_pid	init_child(t_data *data)
 		}
 		tmp = tmp->next;
 	}
-	child.nb_out = find_nb_out(tmp);
 	return (child);
-}
-
-int	find_nb_out(t_exp *lst)
-{
-	t_exp	*tmp;
-	int		nb_out;
-	int		id;
-
-	id = lst->id;
-	nb_out = 0;
-	tmp = lst;
-	while (tmp != NULL)
-	{
-		if (tmp->id == id)
-			nb_out++;
-		tmp = tmp->next;
-	}
-	return (nb_out);
 }

@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/05/15 10:31:25 by mgayout          ###   ########.fr        #
+#    Updated: 2024/05/16 12:06:31 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,10 +41,8 @@ SRC_PAR =	parser \
 			parser_function \
 
 SRC_EXP =	expander \
-			expander_init \
 			expander_env \
 			expander_utils \
-			expander_function \
 
 SRC_EXE =	exec \
 			exec_init \

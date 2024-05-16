@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 13:34:44 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/15 14:09:10 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/16 13:44:05 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,14 @@ char	*env_var(t_data *data, char *str)
 	int	j;
 
 	dollar = count_dollar(str);
-	printf("str = %s\n", str);
 	j = 0;
 	while (j < dollar)
 	{
 		i = 0;
-		while (str[i] != '$')// || (str[i] == '$' && str[i + 1] == '?')
+		while (str[i] != '$')
 			i++;
 		i++;
-		printf("start\n");
 		str = search_env_var(data, str, i);
-		printf("end\n");
 		j++;
 	}
 	return(str);

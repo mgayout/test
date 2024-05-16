@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:55:09 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/15 16:57:11 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/16 11:58:39 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	addlex_topar(t_par *parser, t_lex *lexer)
 		x_elem(parser, lexer);
 	else
 	{
-		last_elem(parser, lexer);
+		last_elem(parser);
 		return (1);
 	}
 	return (0);
@@ -77,7 +77,7 @@ void	x_elem(t_par *parser, t_lex *lexer)
 		add_redir_par(parser, lexer);
 }
 
-void	last_elem(t_par *parser, t_lex *lexer)
+void	last_elem(t_par *parser)
 {
 	t_par	*new;
 

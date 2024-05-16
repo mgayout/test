@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:28:06 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/15 16:43:09 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/16 13:32:01 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	minishell_loop(t_data *data)
 			//print_par(data);
 			if (check_parser(data->parser))
 			{
-				//expander(data);
-				//print_exp(data);
-				//exec(data);
+				expander(data);
+				//print_par(data);
+				exec(data);
 			}
 		}
 		data->last_prompt = ft_strdup(data->prompt);

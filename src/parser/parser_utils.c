@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:15:45 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/15 17:17:20 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/16 11:59:08 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,20 @@ void	add_string_par(t_par *parser, t_lex *lexer)
 		{
 			if (parser->infile)
 			{
-				if (ft_strncmp(parser->heredoc, "true", ft_strlen("true")))
-					wrong_heredoc(parser);
+				if (parser->heredoc)
+					wrong_heredoc(parser->infile);
 				else
 					open(parser->infile, O_CREAT, 0777);
 			}
 			if (lexer->prev->redir == INFILE)
 			{
 				parser->infile = ft_strdup(lexer->data);
-				parser->heredoc = ft_strdup("false");
+				parser->heredoc = false;
 			}
 			else
 			{
 				parser->infile = ft_strdup(lexer->data);
-				parser->heredoc = ft_strdup("true");
+				parser->heredoc = true;
 			}
 		}
 		else if (lexer->prev->redir == OUTFILE || lexer->prev->redir == APPEND)
@@ -42,9 +42,9 @@ void	add_string_par(t_par *parser, t_lex *lexer)
 				open(parser->outfile, O_CREAT, 0777);
 			parser->outfile = ft_strdup(lexer->data);
 			if (lexer->prev->redir == OUTFILE)
-				parser->append = ft_strdup("false");
+				parser->append = false;
 			else if (lexer->prev->redir == APPEND)
-				parser->append = ft_strdup("false");
+				parser->append = true;
 		}
 	}
 	else if (lexer->prev->type == STRING)
@@ -135,10 +135,25 @@ char	*join_data_par(char *old, char *str)
 	return (new);
 }
 
+void	wrong_heredoc(char *stop)
+{
+	char	*buf;
+
+	while (1)
+	{
+		write(STDOUT_FILENO, "> ", 2);
+		buf = get_next_line(STDIN_FILENO);
+		if (!ft_strncmp(buf, stop, ft_strlen(buf) - 1)
+			&& ft_strlen(buf) == ft_strlen(stop) + 1)
+			break ;
+		free(buf);
+	}
+	free(buf);
+}
+
 void	print_par(t_data *data)
 {
 	t_par	*tmp;
-	int		i;
 
 	tmp = data->parser;
 	while (tmp != NULL)
@@ -150,36 +165,19 @@ void	print_par(t_data *data)
 		printf("builtin = %d\n", tmp->builtin);
 		if (tmp->infile)
 		{
-			i = 0;
-			while (tmp->infile[i] != NULL)
-			{
-				printf("infile n*%d = %s\n", i + 1, tmp->infile[i]);
-				i++;
-			}
+			if (!tmp->heredoc)
+				printf("infile = %s\n", tmp->infile);
+			else
+				printf("heredoc limiter = %s\n", tmp->infile);	
 		}
 		if (tmp->pipein)
 			printf("pipein true\n");
-		if (tmp->heredoc)
-		{
-			i = 0;
-			while (tmp->heredoc[i] != NULL)
-			{
-				printf("heredoc limiter n*%d = %s\n", i + 1, tmp->heredoc[i]);
-				i++;
-			}
-		}
 		if (tmp->outfile)
 		{
-			i = 0;
-			while (tmp->outfile[i] != NULL)
-			{
-				printf("outfile n*%d = %s\n", i + 1, tmp->outfile[i]);
-				if (!ft_strncmp(tmp->append[i], "true", ft_strlen("true")))
-					printf("append mode = true\n");
-				else
-					printf("append mode = false\n");
-				i++;
-			}
+			if (!tmp->append)
+				printf("outfile = %s\n", tmp->outfile);
+			else
+				printf("outfile append = %s\n", tmp->outfile);
 		}
 		if (tmp->pipeout)
 			printf("pipeout true\n");
