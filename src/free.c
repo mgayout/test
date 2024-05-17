@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:49:31 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/16 12:05:43 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:21:41 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	free_par(t_par **parser)
 	{
 		tmp = *parser;
 		*parser = (*parser)->next;
-		free(tmp->data);
 		free(tmp->cmd);
 		free(tmp->arg);
 		if (tmp->infile)

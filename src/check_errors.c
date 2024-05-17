@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 11:34:49 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/30 16:17:59 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:40:37 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	check_lexer(t_lex *lexer)
 
 int	check_parser(t_par *parser)
 {
-	if (parser->data)
+	if (parser->id)
 		return (1);
 	return (0);
 }

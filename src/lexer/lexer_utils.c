@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:59:36 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/30 16:53:48 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/17 15:15:21 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,15 @@ void	print_lex(t_data *data)
 		printf("type = %d\n", tmp->type);
 		if (tmp->type == 1)
 			printf("redir = %d\n", tmp->redir);
-		else if (tmp->type == 2)	
-			printf("data = %s\n", tmp->data);
+		else if (tmp->type == 2)
+			while (tmp->data)
+			{
+				if (tmp->data->quote == 2)
+					printf("data quote = %s\n", tmp->data->str);
+				else
+					printf("data no quote = %s\n", tmp->data->str);
+				tmp->data = tmp->data->next;	
+			}
 		tmp = tmp->next;
 		i++;
 	}

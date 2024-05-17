@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 09:16:35 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/16 12:30:26 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:43:39 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,20 @@ typedef struct s_env
 	struct s_env	*prev;
 }				t_env;
 
+typedef struct s_lstr
+{
+	char			*str;
+	t_lex_quote		quote;
+	int				id;
+	bool			heredoc;
+	struct s_lstr	*prev;
+	struct s_lstr	*next;
+}					t_lstr;
+
 typedef struct s_lex
 {
 	t_lex_type		type;
-	char			*data;
+	struct s_lstr	*data;
 	t_lex_redir		redir;
 	struct s_lex	*prev;
 	struct s_lex	*next;
@@ -84,7 +94,22 @@ typedef struct s_par
 {
 	int				id;
 	int				status;
-	char			*data;
+	struct s_lstr	*cmd;
+	struct s_lstr	*arg;
+	int				infile_count;
+	struct s_lstr	*infile;
+	int				outfile_count;
+	struct s_lstr	*outfile;
+	bool			pipein;
+	bool			pipeout;
+	bool			append;
+	struct s_par	*next;
+	struct s_par	*prev;
+}					t_par;
+
+typedef struct s_exp
+{
+	int				id;
 	char			*cmd;
 	int				builtin;
 	char			*arg;
@@ -94,9 +119,9 @@ typedef struct s_par
 	bool			pipeout;
 	bool			heredoc;
 	bool			append;
-	struct s_par	*next;
-	struct s_par	*prev;
-}					t_par;
+	struct s_exp	*next;
+	struct s_exp	*prev;
+}					t_exp;
 
 typedef struct s_exe
 {
@@ -127,6 +152,7 @@ typedef struct s_data
 	char			*last_prompt;
 	struct s_lex	*lexer;
 	struct s_par	*parser;
+	struct s_exp	*expander;
 	struct s_exe	*exec;
 	int				error;
 }					t_data;

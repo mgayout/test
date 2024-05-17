@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:26:41 by mgayout           #+#    #+#             */
-/*   Updated: 2024/04/30 15:54:42 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/17 15:06:19 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,3 @@ int	string_type(t_data *data, t_lex *lexer)
 	}
 	return (i);
 }
-
-

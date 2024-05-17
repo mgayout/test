@@ -6,7 +6,7 @@
 #    By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/09 09:16:25 by mgayout           #+#    #+#              #
-#    Updated: 2024/05/16 12:06:31 by mgayout          ###   ########.fr        #
+#    Updated: 2024/05/17 18:27:31 by mgayout          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,27 +31,28 @@ SRC =	main \
 
 SRC_LEX	=	lexer \
 			lexer_type \
-			lexer_noquote \
 			lexer_quote \
 			lexer_utils \
 			lexer_function \
+			lstr_function \
 
 SRC_PAR =	parser \
-			parser_utils \
+			parser_init \
 			parser_function \
 
 SRC_EXP =	expander \
 			expander_env \
 			expander_utils \
+			expander_function \
 
-SRC_EXE =	exec \
+#SRC_EXE =	exec \
 			exec_init \
 			exec_file_cmd \
 			exec_file_pipeline \
 			exec_utils \
 			exec_cmd \
 
-SRC_BUI =	builtins echo cd pwd export unset env exit \
+#SRC_BUI =	builtins echo cd pwd export unset env exit \
 
 SRCS =	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC)))
 

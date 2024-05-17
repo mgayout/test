@@ -6,7 +6,7 @@
 /*   By: mgayout <mgayout@student.42nice.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 14:26:15 by mgayout           #+#    #+#             */
-/*   Updated: 2024/05/16 11:40:13 by mgayout          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:12:03 by mgayout          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,12 @@ t_par	*new_par()
 		return (NULL);
 	new->id = 0;
 	new->status = 0;
-	new->data = NULL;
 	new->cmd = NULL;
-	new->builtin = 0;
 	new->arg = NULL;
 	new->infile = NULL;
-	new->heredoc = false;
+	new->infile_count = 0;
 	new->outfile = NULL;
+	new->outfile_count = 0;
 	new->append = false;
 	new->pipein = false;
 	new->pipeout = false;
