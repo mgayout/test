@@ -7,3 +7,11 @@ Voici la démarche à suivre :
 2. Renseigner le numéro de l'expérience du jour dans le titre du document, au format : Experiment n°X.
 
 3. Compléter l'ensemble des informations relatives aux paramètres de l'expérience.
+
+
+- map
+- flux
+- nb route
+- feu ...
+
+- hyperparametre

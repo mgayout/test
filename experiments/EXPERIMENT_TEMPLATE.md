@@ -1,8 +1,8 @@
 ## <p align="center">Expérience n°X</p>
 
-<div align="center">
+<div colspan="12" align="center">
 	<table>
-		<tr><th colspan="6" align="center">La carte</th></tr>
+		<tr><th colspan="12" align="center">La carte</th></tr>
         <tr>
           <td>Le nom du fichier</td>
           <td align="center">exemple.map</td>
@@ -11,7 +11,7 @@
           <td>Nombre de feu</td>
           <td align="center">7</td>
         </tr>
-        <tr><th colspan="6" align="center">Les hyperparamètres</th></tr>
+        <tr><th colspan="12" align="center">Les hyperparamètres</th></tr>
         <tr>
           <td>Epsilon</td>
           <td align="center">0.99</td>
@@ -23,11 +23,12 @@
     </table>
 </div>
 
-
-
-- map
-- flux
-- nb route
-- feu ...
-
-- hyperparametre
+<div align="center">
+	<table>
+		<tr><th colspan="6" align="center"></th></tr>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+    </table>
+</div>
