@@ -27,8 +27,8 @@
 	<table>
 		<tr><th colspan="6" align="center">Synthèse de l'expérience</th></tr>
         <tr>
-          <td colspan="2">Avant l'expérience</td>
-          <td colspan="4">"Project Structure
+          <td colspan="6">Avant l'expérience</td>
+          <td colspan="0">"Project Structure
 The code of this project contains two main folders, one for SUMO and another for the Agent
 
 Architecture
