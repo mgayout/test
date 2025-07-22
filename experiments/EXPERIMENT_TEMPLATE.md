@@ -1,6 +1,6 @@
 ## <p align="center">Expérience n°X</p>
 
-<div colspan="6" align="center">
+<div colspan="12" align="center">
 	<table>
 		<tr><th colspan="6" align="center">La carte</th></tr>
         <tr>
@@ -23,7 +23,7 @@
     </table>
 </div>
 
-<div align="center">
+<div colspan="12" align="center">
 	<table>
 		<tr><th colspan="6" align="center">Synthèse de l'expérience</th></tr>
         <tr>
