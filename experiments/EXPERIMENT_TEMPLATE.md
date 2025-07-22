@@ -25,7 +25,7 @@
 
 <div align="center">
 	<table>
-		<tr><th colspan="6" align="center">Synthèse de l'expérience</th></tr>
+		<tr><th colspan="12" align="center">Synthèse de l'expérience</th></tr>
         <tr>
           <td colspan="6">Avant l'expérience</td>
           <td colspan="0">"Project Structure
