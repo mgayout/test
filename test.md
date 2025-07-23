@@ -1,17 +1,25 @@
-Dans le dossier './experiments', vous trouverez un modèle de documentation à compléter avant le lancement de l'entraînement de votre module IA. Ce document a pour objectif de conserver une trace écrite de tous les paramètres utilisés lors de l'expérience.
 
-Voici la démarche à suivre :
+Avant chaque expérience, il vous faudra remplir une page de documentation sur l'expérience à venir. Il est important de suivre la procédure de la template afin de garder une trace des expériences menées.
 
-1. Renommer le fichier en respectant le format : 'DD_MM_YYYY.md'.
-
-2. Renseigner le numéro de l'expérience du jour dans le titre du document, au format : Experiment n°X.
-
-3. Compléter l'ensemble des informations relatives aux paramètres de l'expérience.
+De même pour :
+ - la carte SUMO a sauvegarder dans le dossier `sumo_module/app/examples/`
+ - les graphes TensorBoard a sauvegarder dans le dossier `runs/`
 
 
-- map
-- flux
-- nb route
-- feu ...
+Avant de débuter une expérience, il est nécessaire de compléter une fiche de documentation en suivant scrupuleusement le modèle fourni. Cela permet d’assurer une traçabilité claire et cohérente de l’ensemble des tests réalisés.
 
-- hyperparametre
+De plus, veillez à respecter les emplacements suivants pour les fichiers associés :
+
+La carte SUMO doit être enregistrée dans : sumo_module/app/examples/
+
+Les graphiques TensorBoard doivent être sauvegardés dans : runs/
+
+
+
+Before starting any experiment, it is essential to fill out a documentation sheet (Loop Page) by strictly following the provided template. This ensures clear and consistent traceability of all experiments conducted.
+
+Additionally, make sure to store the related files in the appropriate locations:
+
+The SUMO map must be saved in: sumo_module/app/examples/
+
+The TensorBoard graphs must be saved in: runs/
